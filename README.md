@@ -22,8 +22,7 @@
 <div align="center">
 
 ### 🎬 Concept & Prototype Pitch 
-**[ 🔗 Watch the 2-Minute CovA Breakdown Video ](#)**  
-*(Video Placeholder)*
+**[ 🔗 Watch the 2-Minute CovA Breakdown Video ](https://drive.google.com/file/d/1gv0R632zRX2hZ4nloXQHZZCcDuR_-N8N/view?usp=share_link)**  
 
 </div>
 
