@@ -1,0 +1,5 @@
+[
+  { "id": "ZONE_A", "name": "Koramangala", "city": "Bangalore", "riskScore": 1.0, "riskLevel": "medium", "avgOrdersPerHour": 85, "description": "Moderate risk — moderate rain frequency, good road infrastructure" },
+  { "id": "ZONE_B", "name": "Whitefield", "city": "Bangalore", "riskScore": 1.3, "riskLevel": "high", "avgOrdersPerHour": 65, "description": "High risk — flood-prone areas, heavy traffic, poor drainage" },
+  { "id": "ZONE_C", "name": "Indiranagar", "city": "Bangalore", "riskScore": 0.8, "riskLevel": "low", "avgOrdersPerHour": 95, "description": "Low risk — well-planned area, good drainage, high order density" }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "cova-root",
+  "version": "1.0.0",
+  "description": "CovA Parametric Insurance Platform - Root Orchestrator",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "cd backend && node server.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "clean": "rm -rf backend/data/cova.db* backend/data/.cova.db* frontend/node_modules frontend/package-lock.json",
+    "setup": "npm run clean && npm run install:all",
+    "fix": "npm run setup && npm run dev"
+  }
+}
