@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://YOUR_BACKEND_URL.onrender.com/api/:match*"
+      "destination": "https://cova-backend-x7t2.onrender.com/api/:match*"
     },
     {
       "source": "/mock/:match*",
-      "destination": "https://YOUR_BACKEND_URL.onrender.com/mock/:match*"
+      "destination": "https://cova-backend-x7t2.onrender.com/mock/:match*"
     }
   ],
   "routes": [
