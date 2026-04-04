@@ -25,7 +25,8 @@ export default function InsurerDashboard({ token, onLogout }) {
     fetch('/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+    const wsUrl = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}/ws`;
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);

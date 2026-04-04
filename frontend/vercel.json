@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://YOUR_BACKEND_URL.onrender.com/api/:match*"
+    },
+    {
+      "source": "/mock/:match*",
+      "destination": "https://YOUR_BACKEND_URL.onrender.com/mock/:match*"
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
