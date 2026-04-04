@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE_URL, getWsUrl } from '../utils/api';
 
 export default function InsurerDashboard({ token, onLogout }) {
   const [config, setConfig] = useState(null);
@@ -20,12 +21,11 @@ export default function InsurerDashboard({ token, onLogout }) {
   };
 
   useEffect(() => {
-    fetch('/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
-    fetch('/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
-    fetch('/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+    fetch(API_BASE_URL + '/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
+    fetch(API_BASE_URL + '/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
+    fetch(API_BASE_URL + '/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}/ws`;
+    const wsUrl = getWsUrl();
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
     ws.onmessage = (event) => {
@@ -34,32 +34,32 @@ export default function InsurerDashboard({ token, onLogout }) {
         setCdiData(prev => ({ ...prev, [msg.payload.zone]: msg.payload }));
       }
       if (['CLAIM_CREATED', 'PAYOUT_SENT', 'FRAUD_BLOCKED', 'DEMO_RESET'].includes(msg.type)) {
-        fetch('/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
-        fetch('/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+        fetch(API_BASE_URL + '/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
+        fetch(API_BASE_URL + '/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
       }
       if (msg.type === 'WORKER_REGISTERED') {
-        fetch('/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+        fetch(API_BASE_URL + '/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
       }
     };
     return () => ws.close();
   }, []);
 
   const updateConfig = async (key, value) => {
-    const res = await fetch('/api/insurer/config', {
+    const res = await fetch(API_BASE_URL + '/api/insurer/config', {
       method: 'PATCH', headers,
       body: JSON.stringify({ [key]: value }),
     });
     const data = await res.json();
     if (res.ok || res.status === 207) {
       showToast(`${key} updated`);
-      fetch('/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
+      fetch(API_BASE_URL + '/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
     } else {
       showToast(data.errors?.[0]?.error || 'Update failed', 'error');
     }
   };
 
   const submitToGuidewire = async () => {
-    const res = await fetch('/api/guidewire/submit', { method: 'POST', headers });
+    const res = await fetch(API_BASE_URL + '/api/guidewire/submit', { method: 'POST', headers });
     const data = await res.json();
     if (res.ok) setGwModal(data);
     else showToast(data.error || 'No paid claims to submit', 'error');

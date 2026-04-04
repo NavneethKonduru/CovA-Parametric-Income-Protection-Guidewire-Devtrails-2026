@@ -7,7 +7,9 @@ CovA solves their biggest localized risk: sudden income loss caused by external 
 
 To make this enterprise-grade and secure, CovA is natively designed as a middleware pipeline that feeds verified "Master Claim Payloads" directly into **Guidewire ClaimCenter** while deploying advanced hardware-level anti-spoofing techniques to ensure zero fraud.
 
-## What Inspired Us
+## Built With
+Node.js, Express, React, Vite, Tailwind CSS, SQLite, PostGIS, Python, Scikit-learn, OpenWeatherMap API, TomTom Traffic Index API, Razorpay API, Guidewire ClaimCenter, Guidewire PolicyCenter, Guidewire BillingCenter, Groq AI, WebSockets, Uber H3 Hex-Grid, Android SDK (GnssStatus API)
+
 The modern gig economy is a paradox: it runs on cutting-edge logistics optimization but relies on archaic, paper-based risk protection. 
 
 During the Bangalore floods and recent summer heatwaves, delivery riders were stranded without work for days. While platforms occasionally suspend operations for safety—which is the right thing to do—the resulting opportunity cost is entirely absorbed by the riders, pushing them into debt. 
