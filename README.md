@@ -168,21 +168,22 @@ CovA operates as an event-driven middleware module between the Q-commerce platfo
 
 ```mermaid
 graph TD
-    A[Q-Commerce Platforms<br/>Zepto · Blinkit · Swiggy Instamart] -->|Shift data + Worker UWID| B[CovA Event Router<br/>Node.js / Express]
-    C[Oracle APIs<br/>OpenWeatherMap · TomTom · IMD] -->|Live signals every 30s| B
-    B -->|CDI = 0.40×Weather + 0.35×Demand + 0.25×Peer| D{CDI ≥ 0.60<br/>for 2 cycles?}
-    D -->|No| E[Watch State — continue polling]
-    D -->|Yes| F[TCHC Integrity Layer<br/>3-Signal Fraud Validation]
-    F -->|GNSS SNR + Velocity + Cellular| G{Worker<br/>Verified?}
-    G -->|Blocked — device farm / spoofer| H[Fraud Log — ClaimCenter blocked list]
-    G -->|Verified — organic human presence| I[Payout Engine<br/>hours × rate × CDI factor]
-    I -->|Groq LLM generates explanation| J[Master Payload Builder<br/>1 payload for N workers]
-    J -->|POST /api/guidewire/submit| K[Guidewire ClaimCenter<br/>Fleet Parametric Batch]
-    K -->|claim.approved event| L[Guidewire BillingCenter<br/>Bulk payout trigger]
-    L -->|Razorpay Fund Transfer API| M[Worker UPI Wallets<br/>T+5 minutes]
-    N[PolicyCenter Cloud API v3<br/>Fleet Policy COVA-ZPT-BLR-2026-001] -->|Policy active check| F
-    O[ML Premium Engine<br/>LinearRegression R²=0.94] -->|Weekly micro-premium| P[Worker Onboarding<br/>Jutro-style PWA]
+    A["Q-Commerce Platforms<br/>(Zepto/Blinkit/Swiggy)"] -->|Shift data + Worker UWID| B["CovA Event Router<br/>(Node.js / Express)"]
+    C["Oracle APIs<br/>(Weather/TomTom/IMD)"] -->|Live signals every 30s| B
+    B -->|"CDI = 0.4×W + 0.35×D + 0.25×P"| D{"CDI ≥ 0.60<br/>for 2 cycles?"}
+    D -->|No| E["Watch State —<br/>continue polling"]
+    D -->|Yes| F["TCHC Integrity Layer<br/>3-Signal Fraud Validation"]
+    F -->|GNSS SNR + Velocity + Cellular| G{"Worker<br/>Verified?"}
+    G -->|Blocked — device farm| H["Fraud Log<br/>(ClaimCenter Blocked List)"]
+    G -->|Verified — organic human| I["Payout Engine<br/>(hours × rate × CDI)"]
+    I -->|Groq LLM explanation| J["Master Payload Builder<br/>(1 payload : N workers)"]
+    J -->|POST /api/guidewire/submit| K["Guidewire ClaimCenter<br/>(Fleet Parametric Batch)"]
+    K -->|claim.approved event| L["Guidewire BillingCenter<br/>(Bulk payout trigger)"]
+    L -->|Razorpay Fund Transfer API| M["Worker UPI Wallets<br/>(T+5 minutes)"]
+    N["PolicyCenter Cloud API v3<br/>(Fleet Policy Engine)"] -->|Policy active check| F
+    O["ML Premium Engine<br/>(LinearRegression R²=0.94)"] -->|Weekly micro-premium| P["Worker Onboarding<br/>(Jutro-style PWA)"]
 ```
+
 
 **Tech Stack:**
 
