@@ -168,21 +168,24 @@ CovA operates as an event-driven middleware module between the Q-commerce platfo
 
 ```mermaid
 graph TD
-    A["Q-Commerce<br/>Platforms<br/>(Zepto/Blinkit/Swiggy)"] -->|"Shift data + Worker UWID"| B["CovA Event Router<br/>(Node.js/Express)"]
-    C["Oracle APIs<br/>(Weather/TomTom/IMD)"] -->|"Live signals every 30s"| B
-    B -->|"CDI = 0.4*W + 0.35*D + 0.25*P"| D{"CDI >= 0.60<br/>for 2 cycles?"}
-    D -->|No| E["Watch State<br/>(Continue Polling)"]
-    D -->|Yes| F["TCHC Integrity Layer<br/>(3-Signal Fraud Validation)"]
-    F -->|"GNSS SNR + Velocity + Cellular"| G{"Worker<br/>Verified?"}
-    G -->|"Blocked<br/>(Device Farm)"| H["Fraud Log<br/>(ClaimCenter List)"]
-    G -->|"Verified<br/>(Organic Human)"| I["Payout Engine<br/>(hours * rate * CDI)"]
-    I -->|"Groq LLM<br/>Explanation"| J["Master Payload Builder<br/>(1 payload : N workers)"]
-    J -->|"POST /api/guidewire/submit"| K["Guidewire ClaimCenter<br/>(Fleet Parametric Batch)"]
-    K -->|"claim.approved event"| L["Guidewire BillingCenter<br/>(Bulk Payout Trigger)"]
-    L -->|"Razorpay Fund Transfer API"| M["Worker UPI Wallets<br/>(T+5 minutes)"]
-    N["PolicyCenter API v3<br/>(Fleet Policy Engine)"] -->|"Policy active check"| F
-    O["ML Premium Engine<br/>(LinearRegression R^2=0.94)"] -->|"Weekly micro-premium"| P["Worker Onboarding<br/>(Jutro PWA)"]
+    classDef box padding:15px,stroke-width:2px;
+
+    A["Q-Commerce<br/>Platforms<br/>(Zepto/Blinkit/Swiggy)"]:::box -->|"Shift data + Worker UWID"| B["CovA Event Router<br/>(Node.js/Express)"]:::box
+    C["Oracle APIs<br/>(Weather/TomTom/IMD)"]:::box -->|"Live signals every 30s"| B
+    B -->|"CDI = 0.4*W + 0.35*D + 0.25*P"| D{"CDI >= 0.60<br/>for 2 cycles? "}:::box
+    D -->|No| E["Watch State<br/>(Continue Polling)"]:::box
+    D -->|Yes| F["TCHC Integrity Layer<br/>(3-Signal Fraud Validation)"]:::box
+    F -->|"GNSS SNR + Velocity + Cellular"| G{"Worker<br/>Verified?"}:::box
+    G -->|"Blocked<br/>(Device Farm)"| H["Fraud Log<br/>(ClaimCenter List)"]:::box
+    G -->|"Verified<br/>(Organic Human)"| I["Payout Engine<br/>(hours * rate * CDI)"]:::box
+    I -->|"Groq LLM<br/>Explanation"| J["Master Payload Builder<br/>(1 payload : N workers)"]:::box
+    J -->|"POST /api/guidewire/submit"| K["Guidewire ClaimCenter<br/>(Fleet Parametric Batch)"]:::box
+    K -->|"claim.approved event"| L["Guidewire BillingCenter<br/>(Bulk Payout Trigger)"]:::box
+    L -->|"Razorpay Fund Transfer API"| M["Worker UPI Wallets<br/>(T+5 minutes)"]:::box
+    N["PolicyCenter API v3<br/>(Fleet Policy Engine)"]:::box -->|"Policy active check"| F
+    O["ML Premium Engine<br/>(LinearRegression R^2=0.94)"]:::box -->|"Weekly micro-premium"| P["Worker Onboarding<br/>(Jutro PWA)"]:::box
 ```
+
 
 
 
