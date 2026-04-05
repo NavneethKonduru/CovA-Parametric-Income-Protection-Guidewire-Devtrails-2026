@@ -192,7 +192,7 @@ graph TD
 | ----------------------- | --------------------------------------------------------------------- |
 | Policy Lifecycle        | Guidewire PolicyCenter Cloud API v3 — fleet policy creation + renewal |
 | Claims Batch            | Guidewire ClaimCenter — Master Payload ingestion via REST API         |
-| Bulk Disbursement       | Guidewire BillingCenter → Razorpay Fund Transfer API                  |
+| Bulk Disbursement       | Guidewire BillingCenter → Razorpay Fund Transfer API (Active Test Integration) |
 | Middleware Registration | Guidewire Cloud Integration Framework (CIF)                           |
 | CDI Engine              | Node.js 20 — `engines/claims.js` (CDI formula + disruption state)     |
 | Fraud Engine            | Node.js — `engines/fraud.js` (9-rule TCHC validation)                 |
@@ -303,7 +303,8 @@ CovA is built privacy-first under the **Digital Personal Data Protection (DPDP) 
 
 - **Phase 1 (Complete):** Architecture locked, Guidewire integration strategy, anti-spoofing defense designed, concept video delivered.
 - **Phase 2 (Complete):** Full web app — worker onboarding, ML dynamic premium, automated CDI triggers, zero-touch claims, Guidewire ClaimCenter submission, Groq AI explanations, 100-worker simulation.
-- **Phase 3 (Planned):** Native Android app (hardware GNSS baseband access for TCHC production deployment), real Razorpay payout integration, live Guidewire Cloud Platform sandbox, enterprise multi-city dashboard.
+- **Phase 3 (Planned):** Native Android app (hardware GNSS baseband access for TCHC production deployment), live Guidewire Cloud Platform sandbox, enterprise multi-city dashboard.
+- **Delivered (Phase 2):** ✅ Real Razorpay Fund Transfer integration (Test Mode active), Automated CDI Polling, ClaimCenter Master Payload ingestion.
 - **Long-term:** Packaged as a Guidewire Accelerator App for any insurer serving the gig economy globally — EU Platform Work Directive (2024) creates identical demand across Europe.
 
 ---

@@ -391,7 +391,7 @@ Phase 2 demonstrates the full automated pipeline via a 100-worker simulation:
 | Fake GPS pings with zero GNSS variance | Hardware `GnssStatus.Callback` on Android |
 | Groq LLM claim explanations (live) | Same — Groq already real in Phase 2 |
 | ClaimCenter mock response | Real GWCP ClaimCenter sandbox |
-| Razorpay mock payout | Real Razorpay Fund Transfer (sandbox → production) |
+| Razorpay Test Integration | Real Razorpay Fund Transfer (Active Test Mode) |
 
 ---
 
@@ -419,7 +419,7 @@ Phase 2 demonstrates the full automated pipeline via a 100-worker simulation:
 | `POST /api/cif/policy/create` | PolicyCenter | Create fleet policy for platform |
 | `GET /api/cif/policy/workers` | PolicyCenter | List covered parties under policy |
 | `POST /api/cif/claims/submit` | ClaimCenter | Master Payload submission |
-| `POST /api/cif/billing/payout-batch` | BillingCenter | Trigger Razorpay bulk payout |
+| `POST /api/cif/billing/payout-batch` | BillingCenter | Automated Razorpay bulk payout (Live Test) |
 | `GET /api/cif/billing/reconcile` | BillingCenter | Settlement reconciliation report |
 | `POST /api/cif/webhook/cdi-breach` | Event Hub | Notify Guidewire of CDI threshold breach |
 
