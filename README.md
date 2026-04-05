@@ -168,7 +168,7 @@ CovA operates as an event-driven middleware module between the Q-commerce platfo
 
 ```mermaid
 graph TD
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,padding:20px;
+    classDef default stroke-width:2px,padding:20px;
 
     A["&nbsp; Q-Commerce Platforms &nbsp;<br/>&nbsp; (Zepto / Blinkit / Swiggy) &nbsp;"] -->|Shift data + Worker UWID| B["&nbsp; CovA Event Router &nbsp;<br/>&nbsp; (Node.js / Express) &nbsp;"]
     C["&nbsp; Oracle APIs &nbsp;<br/>&nbsp; (Weather / TomTom / IMD) &nbsp;"] -->|Live signals every 30s| B
