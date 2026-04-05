@@ -61,8 +61,8 @@ type: "readme"
 
 ## 📺 Project Media
 
-1. **[Product Deep-Dive (NotebookLM)](https://drive.google.com/file/d/1hV0ryzKMulSqgpivshAnj8YuGyzSMWqA/view?usp=share_link)** — A clean, informative overview of the CovA engine and business logic.
-2. **[Concept Ad (AI Generated)](https://drive.google.com/file/d/1YUdTAG9m1dMmZfmD-7AIjX7QxyenVkFX/view?usp=share_link)** — A marketing-style creative video showcasing the rider's perspective.
+1. **[Product Deep-Dive ](https://drive.google.com/file/d/1hV0ryzKMulSqgpivshAnj8YuGyzSMWqA/view?usp=share_link)** — A clean, informative overview of the CovA engine and business logic.
+2. **[Concept Ad ](https://drive.google.com/file/d/1YUdTAG9m1dMmZfmD-7AIjX7QxyenVkFX/view?usp=share_link)** — A marketing-style creative video showcasing the rider's perspective.
 
 ---
 
@@ -98,24 +98,24 @@ It operates as a registered middleware module within **Guidewire's Cloud Integra
 
 Phase 2 theme: **Automation & Protection.** Every requirement delivered — with three exceeding specification.
 
-| Requirement | Implementation | Evidence | Status |
-|---|---|---|---|
-| Registration Process | 3-step mobile-style onboarding with UWID generation | `/pages/Onboarding.jsx` → `POST /api/workers/register` | ✅ Delivered |
-| Insurance Policy Management | Insurer config panel: 5 live parameters (base rate, CDI threshold, max payout, cooldown, peak multiplier) | `/pages/InsurerDashboard.jsx` → `PUT /api/insurer/config` | ✅ Delivered |
-| Dynamic Premium Calculation | Trained ML model (LinearRegression, R²=0.94) using zone risk + archetype multiplier | `/backend/engines/premium-ml.js` + `/ml/generate_and_train.py` | ✅ Delivered |
-| Claims Management | Zero-touch auto-claim via 30-second cron + 2-cycle CDI persistence gate | `/backend/cron/poller.js` → `/engines/claims.js` | ✅ Delivered |
-| AI Integration | Groq LLM generates plain-language explanation for every auto-generated claim | `/backend/engines/groq-explainer.js` | ✅ Delivered |
-| Automated Triggers | 6 parametric CDI scenarios across 3 zones + live weather/demand/peer signals | `/backend/simulation/scenario-engine.js` | ✅ **6/3 — 2× requirement** |
-| Zero-Touch UX | Worker never touches the app to trigger or receive a claim | Entire cron pipeline — E2E automated | ✅ Delivered |
-| Guidewire ClaimCenter Submit | Real master payload submission with full JSON schema → ClaimCenter API | `/backend/routes/guidewire.js` → `POST /api/guidewire/submit` | ✅ Delivered |
+| Requirement                  | Implementation                                                                                            | Evidence                                                       | Status                      |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------- |
+| Registration Process         | 3-step mobile-style onboarding with UWID generation                                                       | `/pages/Onboarding.jsx` → `POST /api/workers/register`         | ✅ Delivered                |
+| Insurance Policy Management  | Insurer config panel: 5 live parameters (base rate, CDI threshold, max payout, cooldown, peak multiplier) | `/pages/InsurerDashboard.jsx` → `PUT /api/insurer/config`      | ✅ Delivered                |
+| Dynamic Premium Calculation  | Trained ML model (LinearRegression, R²=0.94) using zone risk + archetype multiplier                       | `/backend/engines/premium-ml.js` + `/ml/generate_and_train.py` | ✅ Delivered                |
+| Claims Management            | Zero-touch auto-claim via 30-second cron + 2-cycle CDI persistence gate                                   | `/backend/cron/poller.js` → `/engines/claims.js`               | ✅ Delivered                |
+| AI Integration               | Groq LLM generates plain-language explanation for every auto-generated claim                              | `/backend/engines/groq-explainer.js`                           | ✅ Delivered                |
+| Automated Triggers           | 6 parametric CDI scenarios across 3 zones + live weather/demand/peer signals                              | `/backend/simulation/scenario-engine.js`                       | ✅ **6/3 — 2× requirement** |
+| Zero-Touch UX                | Worker never touches the app to trigger or receive a claim                                                | Entire cron pipeline — E2E automated                           | ✅ Delivered                |
+| Guidewire ClaimCenter Submit | Real master payload submission with full JSON schema → ClaimCenter API                                    | `/backend/routes/guidewire.js` → `POST /api/guidewire/submit`  | ✅ Delivered                |
 
 ### Live Demo Access
 
-| Role | Email | Password | What you see |
-|---|---|---|---|
-| **Worker** | `worker@cova.in` | `cova2026` | Mobile onboarding → live CDI gauge → AI claim timeline |
+| Role        | Email             | Password   | What you see                                               |
+| ----------- | ----------------- | ---------- | ---------------------------------------------------------- |
+| **Worker**  | `worker@cova.in`  | `cova2026` | Mobile onboarding → live CDI gauge → AI claim timeline     |
 | **Insurer** | `insurer@cova.in` | `cova2026` | Policy config → claims dashboard → Guidewire submit button |
-| **Admin** | `admin@cova.in` | `cova2026` | CDI weight tuning → fraud rules → 6 simulation scenarios |
+| **Admin**   | `admin@cova.in`   | `cova2026` | CDI weight tuning → fraud rules → 6 simulation scenarios   |
 
 **[🔗 Try the Live Demo →](https://cova-frontend.onrender.com)**
 
@@ -129,13 +129,13 @@ CovA insures **loss of earned income** during objectively measurable external di
 
 ### What CovA Covers
 
-| Covered Peril | Trigger Signal | CDI Weight | Max Payout |
-|---|---|---|---|
-| Heavy Rainfall / Urban Flooding | OpenWeatherMap: precipitation ≥ 50mm/hr | 40% | 8 hrs × hourly rate |
-| Extreme Heatwave | IMD: temperature ≥ 38°C + platform stand-down | 10% | 8 hrs × hourly rate |
-| Severe Traffic Gridlock | TomTom: avg speed ≤ 5 km/hr in covered zone | 20% | 8 hrs × hourly rate |
-| Civic Curfew / Section 144 | Government-declared area restriction | 13% | 8 hrs × hourly rate |
-| Platform-Declared Outage | Dark store closure confirmed via platform API | 17% | 8 hrs × hourly rate |
+| Covered Peril                   | Trigger Signal                                | CDI Weight | Max Payout          |
+| ------------------------------- | --------------------------------------------- | ---------- | ------------------- |
+| Heavy Rainfall / Urban Flooding | OpenWeatherMap: precipitation ≥ 50mm/hr       | 40%        | 8 hrs × hourly rate |
+| Extreme Heatwave                | IMD: temperature ≥ 38°C + platform stand-down | 10%        | 8 hrs × hourly rate |
+| Severe Traffic Gridlock         | TomTom: avg speed ≤ 5 km/hr in covered zone   | 20%        | 8 hrs × hourly rate |
+| Civic Curfew / Section 144      | Government-declared area restriction          | 13%        | 8 hrs × hourly rate |
+| Platform-Declared Outage        | Dark store closure confirmed via platform API | 17%        | 8 hrs × hourly rate |
 
 **Daily payout cap:** 8 hours of lost income. **Cool-down period:** 2 hours after an approved disruption block. **Eligibility:** Worker must have an active telemetry ping within the covered zone 15 minutes prior to CDI breach.
 
@@ -143,20 +143,20 @@ CovA insures **loss of earned income** during objectively measurable external di
 
 The following are **categorically excluded** from all CovA policies. These exclusions are not limitations — they are what makes the product actuarially viable and regulatory-compliant.
 
-| Exclusion | Category | Reason |
-|---|---|---|
-| Personal accident / bodily injury | Medical | Requires physical investigation — destroys zero-LAE model. IRDAI Motor Vehicle Act governs separately. |
-| Health / medical expenses | Medical | Fundamentally different risk class requiring separate actuarial underwriting. |
-| Life insurance / death benefit | Life | Mortality pricing is incompatible with weekly micro-premium model; requires separate IRDAI life license. |
-| Vehicle or asset damage | Motor | Governed by IRDAI Motor Vehicles Act; separate product category. |
-| Voluntary absence / personal choice | Behavioural | CDI parametric trigger cannot distinguish voluntary from involuntary cessation. |
-| Gradual economic decline / platform algorithm changes | Systemic | No natural parametric trigger point; unbounded and non-insurable. |
-| Pre-existing medical conditions | Medical | Out of scope for income-protection product. |
-| Losses during unapproved zones | Geographic | Worker must be in a registered coverage zone to be eligible. |
-| Multi-platform concurrent claims | Anti-stacking | UWID (Unified Worker Identifier) prevents simultaneous active policies across two platforms. |
-| Fraud-flagged disruptions | TCHC | Workers blocked by the TCHC Integrity Layer are categorically ineligible for the event period. |
-| Claims during lapsed policy | Lapse | 72-hour grace period after failed premium deduction; no backdated claims during lapse. |
-| Income from non-delivery sources | Scope | Policy covers delivery income only — not tips, bonuses, or side income. |
+| Exclusion                                             | Category      | Reason                                                                                                   |
+| ----------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
+| Personal accident / bodily injury                     | Medical       | Requires physical investigation — destroys zero-LAE model. IRDAI Motor Vehicle Act governs separately.   |
+| Health / medical expenses                             | Medical       | Fundamentally different risk class requiring separate actuarial underwriting.                            |
+| Life insurance / death benefit                        | Life          | Mortality pricing is incompatible with weekly micro-premium model; requires separate IRDAI life license. |
+| Vehicle or asset damage                               | Motor         | Governed by IRDAI Motor Vehicles Act; separate product category.                                         |
+| Voluntary absence / personal choice                   | Behavioural   | CDI parametric trigger cannot distinguish voluntary from involuntary cessation.                          |
+| Gradual economic decline / platform algorithm changes | Systemic      | No natural parametric trigger point; unbounded and non-insurable.                                        |
+| Pre-existing medical conditions                       | Medical       | Out of scope for income-protection product.                                                              |
+| Losses during unapproved zones                        | Geographic    | Worker must be in a registered coverage zone to be eligible.                                             |
+| Multi-platform concurrent claims                      | Anti-stacking | UWID (Unified Worker Identifier) prevents simultaneous active policies across two platforms.             |
+| Fraud-flagged disruptions                             | TCHC          | Workers blocked by the TCHC Integrity Layer are categorically ineligible for the event period.           |
+| Claims during lapsed policy                           | Lapse         | 72-hour grace period after failed premium deduction; no backdated claims during lapse.                   |
+| Income from non-delivery sources                      | Scope         | Policy covers delivery income only — not tips, bonuses, or side income.                                  |
 
 > **Actuarial note:** Without these 12 exclusions, CovA's blended loss ratio would exceed 200%. The exclusions are not a product restriction — they are the product definition. Full actuarial derivation in [FINANCIALS.md](./FINANCIALS.md).
 
@@ -186,20 +186,20 @@ graph TD
 
 **Tech Stack:**
 
-| Layer | Technology |
-|---|---|
-| Policy Lifecycle | Guidewire PolicyCenter Cloud API v3 — fleet policy creation + renewal |
-| Claims Batch | Guidewire ClaimCenter — Master Payload ingestion via REST API |
-| Bulk Disbursement | Guidewire BillingCenter → Razorpay Fund Transfer API |
-| Middleware Registration | Guidewire Cloud Integration Framework (CIF) |
-| CDI Engine | Node.js 20 — `engines/claims.js` (CDI formula + disruption state) |
-| Fraud Engine | Node.js — `engines/fraud.js` (9-rule TCHC validation) |
-| ML Premium | Python 3.11 + Scikit-learn — `ml/generate_and_train.py` (R²=0.94) |
-| AI Explanations | Groq LLM — `engines/groq-explainer.js` |
-| Worker UI | React 18 + Vite + TailwindCSS (mobile-first PWA) |
-| Database | SQLite + better-sqlite3 (WAL mode, auto-seeding) |
-| Infrastructure | Render.com (single-deployment, zero DevOps overhead) |
-| Auth | Token-based RBAC — worker / insurer / admin roles |
+| Layer                   | Technology                                                            |
+| ----------------------- | --------------------------------------------------------------------- |
+| Policy Lifecycle        | Guidewire PolicyCenter Cloud API v3 — fleet policy creation + renewal |
+| Claims Batch            | Guidewire ClaimCenter — Master Payload ingestion via REST API         |
+| Bulk Disbursement       | Guidewire BillingCenter → Razorpay Fund Transfer API                  |
+| Middleware Registration | Guidewire Cloud Integration Framework (CIF)                           |
+| CDI Engine              | Node.js 20 — `engines/claims.js` (CDI formula + disruption state)     |
+| Fraud Engine            | Node.js — `engines/fraud.js` (9-rule TCHC validation)                 |
+| ML Premium              | Python 3.11 + Scikit-learn — `ml/generate_and_train.py` (R²=0.94)     |
+| AI Explanations         | Groq LLM — `engines/groq-explainer.js`                                |
+| Worker UI               | React 18 + Vite + TailwindCSS (mobile-first PWA)                      |
+| Database                | SQLite + better-sqlite3 (WAL mode, auto-seeding)                      |
+| Infrastructure          | Render.com (single-deployment, zero DevOps overhead)                  |
+| Auth                    | Token-based RBAC — worker / insurer / admin roles                     |
 
 ---
 
@@ -254,6 +254,7 @@ npm run dev
 ```
 
 **Try the automated pipeline:**
+
 1. Login as Admin → click **"Whitefield Monsoon"** scenario
 2. Wait 60 seconds → switch to Insurer dashboard
 3. Watch claims appear without refreshing — cron auto-processed them
@@ -269,16 +270,16 @@ npm run dev
 
 **At 5,000 enrolled workers across one metro, CovA saves ₹47.5 Crore per year in Loss Adjustment Expense alone.**
 
-| Metric | Status Quo | With CovA | Source |
-|---|---|---|---|
-| Workers with income protection | <10% of 7.7M gig workers | Scalable to any Q-commerce fleet | NITI Aayog, 2021 |
-| Time from disruption to cash-in-hand | 14+ days (manual claims) | Under 5 minutes (automated) | Phase 2 live simulation |
-| Claims per monsoon event (500 workers) | 165 individual filings | 1 Master Payload | CovA pilot simulation |
-| LAE per claim | ₹2,000 (industry standard) | ₹0 (STP — Straight-Through Processing) | Insurance Institute of India benchmarks |
-| Fraud block rate | 0% (honour system) | 35% blocked by TCHC | CovA fraud engine simulation |
-| Adjusted loss ratio | 110% (unviable) | 71.4% (profitable) | CovA financial model — see FINANCIALS.md |
-| ML premium accuracy (R²) | N/A | 0.94 | `ml/training_data.json` |
-| Annual GWP per 1M workers | ₹0 (no product exists) | ₹196 Crore (₹196/worker/month) | CovA pricing model |
+| Metric                                 | Status Quo                 | With CovA                              | Source                                   |
+| -------------------------------------- | -------------------------- | -------------------------------------- | ---------------------------------------- |
+| Workers with income protection         | <10% of 7.7M gig workers   | Scalable to any Q-commerce fleet       | NITI Aayog, 2021                         |
+| Time from disruption to cash-in-hand   | 14+ days (manual claims)   | Under 5 minutes (automated)            | Phase 2 live simulation                  |
+| Claims per monsoon event (500 workers) | 165 individual filings     | 1 Master Payload                       | CovA pilot simulation                    |
+| LAE per claim                          | ₹2,000 (industry standard) | ₹0 (STP — Straight-Through Processing) | Insurance Institute of India benchmarks  |
+| Fraud block rate                       | 0% (honour system)         | 35% blocked by TCHC                    | CovA fraud engine simulation             |
+| Adjusted loss ratio                    | 110% (unviable)            | 71.4% (profitable)                     | CovA financial model — see FINANCIALS.md |
+| ML premium accuracy (R²)               | N/A                        | 0.94                                   | `ml/training_data.json`                  |
+| Annual GWP per 1M workers              | ₹0 (no product exists)     | ₹196 Crore (₹196/worker/month)         | CovA pricing model                       |
 
 > Methodology: Premium rates derived from published micro-insurance pilots (Digit Insurance, Bajaj Allianz 2022–2023). Worker count from NITI Aayog 2021. Disruption frequency from IMD Bangalore rainfall data and TomTom Urban Mobility Index 2023. LAE benchmark from Insurance Institute of India.
 
@@ -317,6 +318,6 @@ CovA is built privacy-first under the **Digital Personal Data Protection (DPDP) 
 **He didn't file a claim. He didn't make a call. He didn't know we were involved.**
 **That is exactly how it should work.**
 
-*Built by Team CovA for Guidewire DEVTrails 2026.*
+_Built by Team CovA for Guidewire DEVTrails 2026._
 
 </div>

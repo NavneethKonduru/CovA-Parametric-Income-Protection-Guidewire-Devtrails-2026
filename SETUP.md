@@ -167,4 +167,4 @@ The repo includes `render.yaml` for one-click Render.com deployment. The live de
 
 ---
 
-📋 [README.md](./README.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md) · 🎬 [DEMO.md](./DEMO.md)
+📋 [README.md](./README.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md)

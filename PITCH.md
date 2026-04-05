@@ -24,7 +24,7 @@ type: "pitch"
 
 > **₹792 Crore/year in Loss Adjustment Expense, eliminated. 1.5 million uninsured workers, covered. One Guidewire integration.**
 
-📋 [README.md](./README.md) · 💰 [FINANCIALS.md](./FINANCIALS.md) · 🎬 [DEMO.md](./DEMO.md)
+📋 [README.md](./README.md) · 💰 [FINANCIALS.md](./FINANCIALS.md)
 
 ---
 
@@ -145,4 +145,4 @@ Then India. Then Europe. Then everywhere gig platforms operate and workers ride 
 
 ---
 
-📋 [README.md](./README.md) · 💰 [FINANCIALS.md](./FINANCIALS.md) · 🎬 [DEMO.md](./DEMO.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md)
+📋 [README.md](./README.md) · 💰 [FINANCIALS.md](./FINANCIALS.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md)
