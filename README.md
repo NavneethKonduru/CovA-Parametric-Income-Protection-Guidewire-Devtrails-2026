@@ -59,6 +59,11 @@ type: "readme"
 [![DPDP Compliant](https://img.shields.io/badge/Privacy-DPDP_Act_2023-blue?style=for-the-badge)](#privacy--compliance)
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Now-success?style=for-the-badge)](https://cova-frontend.onrender.com)
 
+## 📺 Project Media
+
+1. **[Product Deep-Dive (NotebookLM)](https://drive.google.com/file/d/1hV0ryzKMulSqgpivshAnj8YuGyzSMWqA/view?usp=share_link)** — A clean, informative overview of the CovA engine and business logic.
+2. **[Concept Ad (AI Generated)](https://drive.google.com/file/d/1YUdTAG9m1dMmZfmD-7AIjX7QxyenVkFX/view?usp=share_link)** — A marketing-style creative video showcasing the rider's perspective.
+
 ---
 
 ## The Problem
