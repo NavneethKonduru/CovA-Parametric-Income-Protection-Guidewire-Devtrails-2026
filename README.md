@@ -302,7 +302,7 @@ CovA is built privacy-first under the **Digital Personal Data Protection (DPDP) 
 
 ## Document Suite
 
-📋 [README.md](./README.md) · 🎯 [PITCH.md](./PITCH.md) · 💰 [FINANCIALS.md](./FINANCIALS.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md) · 🎬 [DEMO.md](./DEMO.md) · 📊 [IMPACT.md](./IMPACT.md) · 🧠 [REASONING.md](./REASONING.md) · 🎤 [TALKTRACK.md](./TALKTRACK.md) · 🛡️ [COVERAGE_EXCLUSIONS.md](./COVERAGE_EXCLUSIONS.md) · ⚙️ [SETUP.md](./SETUP.md)
+📋 [README.md](./README.md) · 🎯 [PITCH.md](./PITCH.md) · 💰 [FINANCIALS.md](./FINANCIALS.md) · 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md) · 📊 [IMPACT.md](./IMPACT.md) · 🧠 [REASONING.md](./REASONING.md) · 🛡️ [COVERAGE_EXCLUSIONS.md](./COVERAGE_EXCLUSIONS.md) · ⚙️ [SETUP.md](./SETUP.md)
 
 ---
 
