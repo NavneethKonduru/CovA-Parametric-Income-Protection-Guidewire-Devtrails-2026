@@ -149,7 +149,7 @@ python generate_and_train.py
 
 ## 7. Production Deployment (Render.com)
 
-The repo includes `render.yaml` for one-click Render.com deployment. The live demo at `cova-frontend.onrender.com` is deployed from the `main` branch.
+The repo includes `render.yaml` for one-click Render.com deployment. The live demo at `cov-a-parametric-income-protection.vercel.app` is deployed from the `main` branch.
 
 **Note:** Render free tier spins down after 15 minutes of inactivity. First request after inactivity may take 30–45 seconds to cold-start. This is expected behaviour — not a bug.
 

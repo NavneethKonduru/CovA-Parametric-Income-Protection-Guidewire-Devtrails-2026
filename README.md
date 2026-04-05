@@ -26,7 +26,7 @@ members:
   - "S Rahul Kanth"
   - "Saisharvesh B"
   - "Sherene Faustina A"
-demo_url: "https://cova-frontend.onrender.com"
+demo_url: "https://cov-a-parametric-income-protection.vercel.app"
 repo_url: "https://github.com/team-cova/cova"
 tech_stack:
   - "Guidewire ClaimCenter REST API"
@@ -57,7 +57,7 @@ type: "readme"
 [![ClaimCenter](https://img.shields.io/badge/ClaimCenter-Master_Payload-0066CC?style=for-the-badge)](#guidewire-integration)
 [![PolicyCenter](https://img.shields.io/badge/PolicyCenter-Fleet_Policy_API-0066CC?style=for-the-badge)](#guidewire-integration)
 [![DPDP Compliant](https://img.shields.io/badge/Privacy-DPDP_Act_2023-blue?style=for-the-badge)](#privacy--compliance)
-[![Live Demo](https://img.shields.io/badge/Demo-Live_Now-success?style=for-the-badge)](https://cova-frontend.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Now-success?style=for-the-badge)](https://cov-a-parametric-income-protection.vercel.app)
 
 ## 📺 Project Media
 
@@ -117,7 +117,7 @@ Phase 2 theme: **Automation & Protection.** Every requirement delivered — with
 | **Insurer** | `insurer@cova.in` | `cova2026` | Policy config → claims dashboard → Guidewire submit button |
 | **Admin**   | `admin@cova.in`   | `cova2026` | CDI weight tuning → fraud rules → 6 simulation scenarios   |
 
-**[🔗 Try the Live Demo →](https://cova-frontend.onrender.com)**
+**[🔗 Try the Live Demo →](https://cov-a-parametric-income-protection.vercel.app)**
 
 ---
 
