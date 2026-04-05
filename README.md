@@ -45,8 +45,6 @@ license: "MIT"
 type: "readme"
 ---
 
-<!-- PSYCHOLOGY: Reciprocity — the single most striking true fact lands in the first line -->
-
 # ⚡ CovA — Every Disruption Detected. Every Rider Protected.
 
 > **Fewer than 10% of India's 7.7 million gig delivery workers hold any accident or income protection insurance.**
@@ -68,8 +66,6 @@ type: "readme"
 
 ## The Problem
 
-<!-- PSYCHOLOGY: Loss Aversion + Named Persona — present tense, daily, ongoing loss -->
-
 **Meet Arjun, a 26-year-old delivery partner on Zepto in Whitefield, Bengaluru.**
 
 Arjun completes 18–22 deliveries per 8-hour shift, riding 65 km through dense urban traffic to deliver groceries in under 10 minutes. He earns ₹19,000/month. When a sudden monsoon hits his zone, Zepto suspends all deliveries within minutes — and Arjun's income drops to ₹0, instantly.
@@ -83,8 +79,6 @@ It affects an estimated 7.7 million gig workers in India (NITI Aayog, 2021). Few
 ---
 
 ## The Solution
-
-<!-- PSYCHOLOGY: Scarcity + Authority — name the specific gap and the specific technology -->
 
 **CovA (Coverage Automated)** is a Guidewire-native parametric middleware platform that monitors real-world disruption signals, validates affected workers, and submits a single mathematically-verified Master Claim Payload to Guidewire ClaimCenter — with zero human intervention, in under 5 minutes.
 
@@ -122,8 +116,6 @@ Phase 2 theme: **Automation & Protection.** Every requirement delivered — with
 ---
 
 ## Coverage Scope & Explicit Exclusions
-
-<!-- PSYCHOLOGY: Trust-building — explicitly bounding what we cover is what makes the product real -->
 
 CovA insures **loss of earned income** during objectively measurable external disruptions. The product is parametric — payouts are triggered by breach of the Composite Disruption Index (CDI ≥ 0.60 for two consecutive 30-second evaluation cycles), not by individual claim filing.
 
@@ -188,20 +180,20 @@ graph TD
 
 **Tech Stack:**
 
-| Layer                   | Technology                                                            |
-| ----------------------- | --------------------------------------------------------------------- |
-| Policy Lifecycle        | Guidewire PolicyCenter Cloud API v3 — fleet policy creation + renewal |
-| Claims Batch            | Guidewire ClaimCenter — Master Payload ingestion via REST API         |
+| Layer                   | Technology                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------ |
+| Policy Lifecycle        | Guidewire PolicyCenter Cloud API v3 — fleet policy creation + renewal          |
+| Claims Batch            | Guidewire ClaimCenter — Master Payload ingestion via REST API                  |
 | Bulk Disbursement       | Guidewire BillingCenter → Razorpay Fund Transfer API (Active Test Integration) |
-| Middleware Registration | Guidewire Cloud Integration Framework (CIF)                           |
-| CDI Engine              | Node.js 20 — `engines/claims.js` (CDI formula + disruption state)     |
-| Fraud Engine            | Node.js — `engines/fraud.js` (9-rule TCHC validation)                 |
-| ML Premium              | Python 3.11 + Scikit-learn — `ml/generate_and_train.py` (R²=0.94)     |
-| AI Explanations         | Groq LLM — `engines/groq-explainer.js`                                |
-| Worker UI               | React 18 + Vite + TailwindCSS (mobile-first PWA)                      |
-| Database                | SQLite + better-sqlite3 (WAL mode, auto-seeding)                      |
-| Infrastructure          | Render.com (single-deployment, zero DevOps overhead)                  |
-| Auth                    | Token-based RBAC — worker / insurer / admin roles                     |
+| Middleware Registration | Guidewire Cloud Integration Framework (CIF)                                    |
+| CDI Engine              | Node.js 20 — `engines/claims.js` (CDI formula + disruption state)              |
+| Fraud Engine            | Node.js — `engines/fraud.js` (9-rule TCHC validation)                          |
+| ML Premium              | Python 3.11 + Scikit-learn — `ml/generate_and_train.py` (R²=0.94)              |
+| AI Explanations         | Groq LLM — `engines/groq-explainer.js`                                         |
+| Worker UI               | React 18 + Vite + TailwindCSS (mobile-first PWA)                               |
+| Database                | SQLite + better-sqlite3 (WAL mode, auto-seeding)                               |
+| Infrastructure          | Render.com (single-deployment, zero DevOps overhead)                           |
+| Auth                    | Token-based RBAC — worker / insurer / admin roles                              |
 
 ---
 
@@ -267,8 +259,6 @@ npm run dev
 ---
 
 ## Impact
-
-<!-- PSYCHOLOGY: Anchoring — biggest defensible number first, with visible methodology -->
 
 **At 5,000 enrolled workers across one metro, CovA saves ₹47.5 Crore per year in Loss Adjustment Expense alone.**
 
