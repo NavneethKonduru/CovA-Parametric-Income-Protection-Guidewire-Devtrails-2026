@@ -89,6 +89,147 @@ app.use('/api/admin', adminRouter);
 // Demo controls — mounted from admin router but aliased for convenience
 app.use('/api/demo', adminRouter);
 
+// API Welcome Page (Sleek Landing Page)
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CovA | API Engine</title>
+        <style>
+            :root {
+                --bg: #0f172a;
+                --text: #f8fafc;
+                --cyan: #06b6d4;
+                --emerald: #10b981;
+                --gray: #64748b;
+            }
+            body { 
+                margin: 0; 
+                font-family: 'Inter', -apple-system, sans-serif; 
+                background: var(--bg); 
+                color: var(--text);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                overflow: hidden;
+            }
+            .container { 
+                text-align: center; 
+                padding: 2rem;
+                z-index: 10;
+                animation: fadeIn 1s ease-out;
+            }
+            .logo {
+                font-size: 4rem;
+                margin-bottom: 1rem;
+                filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.4));
+            }
+            h1 {
+                margin: 0;
+                font-size: 2.5rem;
+                letter-spacing: -0.05em;
+                background: linear-gradient(to right, var(--cyan), var(--emerald));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 800;
+            }
+            .status {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-top: 1rem;
+                padding: 0.5rem 1rem;
+                background: rgba(16, 185, 129, 0.1);
+                border: 1px solid rgba(16, 185, 129, 0.2);
+                border-radius: 99px;
+                color: var(--emerald);
+                font-size: 0.875rem;
+                font-weight: 600;
+            }
+            .pulse {
+                width: 8px;
+                height: 8px;
+                background: var(--emerald);
+                border-radius: 50%;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+                animation: pulse 2s infinite;
+            }
+            .links {
+                margin-top: 3rem;
+                display: flex;
+                gap: 1.5rem;
+                justify-content: center;
+            }
+            a {
+                color: var(--gray);
+                text-decoration: none;
+                font-size: 0.875rem;
+                transition: all 0.2s;
+                padding: 0.5rem 1rem;
+                border: 1px solid transparent;
+                border-radius: 8px;
+            }
+            a:hover {
+                color: var(--cyan);
+                background: rgba(6, 182, 212, 0.05);
+                border-color: rgba(6, 182, 212, 0.2);
+            }
+            .footer {
+                position: absolute;
+                bottom: 2rem;
+                font-size: 0.75rem;
+                color: var(--gray);
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+            }
+            @keyframes pulse {
+                0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+                70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+                100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .glow {
+                position: absolute;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(6,182,212,0.05) 0%, rgba(15,23,42,0) 70%);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="glow"></div>
+        <div class="container">
+            <div class="logo">🛡️</div>
+            <h1>CovA Engine</h1>
+            <div class="status">
+                <div class="pulse"></div>
+                SYSTEMS OPERATIONAL
+            </div>
+            
+            <div class="links">
+                <a href="/api/health">Endpoint Health</a>
+                <a href="/api/workers">Worker Registry</a>
+                <a href="/api/guidewire/status">Guidewire Status</a>
+            </div>
+        </div>
+        <div class="footer">Team ClaimCrypt • DEVTrails 2026</div>
+    </body>
+    </html>
+  `);
+});
+
 // Health check (public)
 app.get('/api/health', (req, res) => {
   res.json({
