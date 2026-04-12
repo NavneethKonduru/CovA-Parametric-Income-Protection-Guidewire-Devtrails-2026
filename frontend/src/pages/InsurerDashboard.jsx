@@ -20,9 +20,9 @@ export default function InsurerDashboard({ token, onLogout }) {
   };
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
-    fetch(`${API_BASE}/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
-    fetch(`${API_BASE}/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+    fetch(`${API_BASE}/api/insurer/config`, { headers }).then(r => r.json()).then(d => setConfig(d.config));
+    fetch(`${API_BASE}/api/claims`, { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
+    fetch(`${API_BASE}/api/admin/health`, { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const ws = new WebSocket(getWsUrl());
@@ -33,32 +33,32 @@ export default function InsurerDashboard({ token, onLogout }) {
         setCdiData(prev => ({ ...prev, [msg.payload.zone]: msg.payload }));
       }
       if (['CLAIM_CREATED', 'PAYOUT_SENT', 'FRAUD_BLOCKED', 'DEMO_RESET'].includes(msg.type)) {
-        fetch(`${API_BASE}/api/claims', { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
-        fetch(`${API_BASE}/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+        fetch(`${API_BASE}/api/claims`, { headers }).then(r => r.json()).then(d => setClaims(d.claims || []));
+        fetch(`${API_BASE}/api/admin/health`, { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
       }
       if (msg.type === 'WORKER_REGISTERED') {
-        fetch(`${API_BASE}/api/admin/health', { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
+        fetch(`${API_BASE}/api/admin/health`, { headers }).then(r => r.json()).then(d => setHealth(d)).catch(() => {});
       }
     };
     return () => ws.close();
   }, []);
 
   const updateConfig = async (key, value) => {
-    const res = await fetch(`${API_BASE}/api/insurer/config', {
+    const res = await fetch(`${API_BASE}/api/insurer/config`, {
       method: 'PATCH', headers,
       body: JSON.stringify({ [key]: value }),
     });
     const data = await res.json();
     if (res.ok || res.status === 207) {
       showToast(`${key} updated`);
-      fetch(`${API_BASE}/api/insurer/config', { headers }).then(r => r.json()).then(d => setConfig(d.config));
+      fetch(`${API_BASE}/api/insurer/config`, { headers }).then(r => r.json()).then(d => setConfig(d.config));
     } else {
       showToast(data.errors?.[0]?.error || 'Update failed', 'error');
     }
   };
 
   const submitToGuidewire = async () => {
-    const res = await fetch(`${API_BASE}/api/guidewire/submit', { method: 'POST', headers });
+    const res = await fetch(`${API_BASE}/api/guidewire/submit`, { method: 'POST', headers });
     const data = await res.json();
     if (res.ok) setGwModal(data);
     else showToast(data.error || 'No paid claims to submit', 'error');

@@ -163,7 +163,7 @@ export default function Onboarding({ token, onWorkerCreated }) {
     };
 
     try {
-      const res = await fetch(`${API_BASE}/api/workers/register', {
+      const res = await fetch(`${API_BASE}/api/workers/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ function App() {
 
   const handleLogout = () => {
     if (auth?.token) {
-      fetch(`${API_BASE}/api/auth/logout', {
+      fetch(`${API_BASE}/api/auth/logout`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${auth.token}` },
       }).catch(() => {});

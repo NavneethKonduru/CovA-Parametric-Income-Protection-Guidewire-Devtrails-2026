@@ -89,7 +89,7 @@ export default function AdminPanel({ token, onLogout }) {
   };
 
   const fetchWorkers = () => {
-    fetch(`${API_BASE}/api/workers', { headers })
+    fetch(`${API_BASE}/api/workers`, { headers })
       .then(r => r.json())
       .then(d => {
         if (Array.isArray(d)) setWorkersList(d);
@@ -100,7 +100,7 @@ export default function AdminPanel({ token, onLogout }) {
   };
 
   const fetchHealth = () => {
-    fetch(`${API_BASE}/api/admin/health', { headers })
+    fetch(`${API_BASE}/api/admin/health`, { headers })
       .then(r => r.json())
       .then(d => d.status === 'healthy' && setHealth(d))
       .catch(() => {});
@@ -108,8 +108,8 @@ export default function AdminPanel({ token, onLogout }) {
 
   useEffect(() => {
     // Fetch initial data
-    fetch(`${API_BASE}/api/admin/cdi-weights', { headers }).then(r => r.json()).then(d => d.weights && setWeights(d.weights)).catch(() => {});
-    fetch(`${API_BASE}/api/admin/cdi-config', { headers }).then(r => r.json()).then(d => d.strategy && setCdiConfig({ strategy: d.strategy, decorrelate: d.decorrelate })).catch(() => {});
+    fetch(`${API_BASE}/api/admin/cdi-weights`, { headers }).then(r => r.json()).then(d => d.weights && setWeights(d.weights)).catch(() => {});
+    fetch(`${API_BASE}/api/admin/cdi-config`, { headers }).then(r => r.json()).then(d => d.strategy && setCdiConfig({ strategy: d.strategy, decorrelate: d.decorrelate })).catch(() => {});
     fetchHealth();
     fetchWorkers();
 
@@ -184,14 +184,14 @@ export default function AdminPanel({ token, onLogout }) {
       showToast(`Weights must sum to 1.0 (got ${sum.toFixed(2)})`, 'error');
       return;
     }
-    const res = await fetch(`${API_BASE}/api/admin/cdi-weights', { method: 'PATCH', headers, body: JSON.stringify(weights) });
+    const res = await fetch(`${API_BASE}/api/admin/cdi-weights`, { method: 'PATCH', headers, body: JSON.stringify(weights) });
     const data = await safeFetchJson(res);
     if (res.ok) showToast('CDI weights updated');
     else showToast(data.error || 'Failed to update weights', 'error');
   };
 
   const updateCdiConfig = async () => {
-    const res = await fetch(`${API_BASE}/api/admin/cdi-config', { method: 'POST', headers, body: JSON.stringify(cdiConfig) });
+    const res = await fetch(`${API_BASE}/api/admin/cdi-config`, { method: 'POST', headers, body: JSON.stringify(cdiConfig) });
     const data = await safeFetchJson(res);
     if (res.ok) showToast('CDI Config updated');
     else showToast(data.error || 'Failed to update config', 'error');
@@ -199,7 +199,7 @@ export default function AdminPanel({ token, onLogout }) {
 
   const simulate = async (scenario) => {
     setSimLoading(true);
-    const res = await fetch(`${API_BASE}/api/demo/simulate', { method: 'POST', headers, body: JSON.stringify({ scenario }) });
+    const res = await fetch(`${API_BASE}/api/demo/simulate`, { method: 'POST', headers, body: JSON.stringify({ scenario }) });
     const data = await safeFetchJson(res);
     if (res.ok) showToast(`Simulation: ${scenario}`);
     else showToast(data.error || 'Simulation failed', 'error');
@@ -219,7 +219,7 @@ export default function AdminPanel({ token, onLogout }) {
     };
 
     try {
-      const res = await fetch(`${API_BASE}/api/demo/simulate-custom', { method: 'POST', headers, body: JSON.stringify(body) });
+      const res = await fetch(`${API_BASE}/api/demo/simulate-custom`, { method: 'POST', headers, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
         showToast(`Custom simulation executed — ${customSim.zone} · ${weatherPreset?.label} · ${demandLevel?.label}`);
@@ -242,7 +242,7 @@ export default function AdminPanel({ token, onLogout }) {
 
   const applyExtFactors = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/admin/external-factors', { method: 'POST', headers, body: JSON.stringify(extFactors) });
+      const res = await fetch(`${API_BASE}/api/admin/external-factors`, { method: 'POST', headers, body: JSON.stringify(extFactors) });
       const data = await safeFetchJson(res);
       if (res.ok) showToast('External factors applied');
       else showToast(data.error || 'Failed to apply factors', 'error');
@@ -293,7 +293,7 @@ export default function AdminPanel({ token, onLogout }) {
   };
 
   const resetDemo = async () => {
-    const res = await fetch(`${API_BASE}/api/demo/reset', { method: 'DELETE', headers });
+    const res = await fetch(`${API_BASE}/api/demo/reset`, { method: 'DELETE', headers });
     if (res.ok) {
       showToast('Demo state reset');
       fetchHealth();
