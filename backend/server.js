@@ -90,7 +90,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/demo', adminRouter);
 
 // API Welcome Page (Sleek Landing Page)
-app.get('/', (req, res) => {
+app.get('/api-info', (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
@@ -230,6 +230,11 @@ app.get('/', (req, res) => {
   `);
 });
 
+// ============================================================
+// FRONTEND STATIC SERVING (Unified Deployment)
+// ============================================================
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
 // Health check (public)
 app.get('/api/health', (req, res) => {
   res.json({
@@ -241,6 +246,11 @@ app.get('/api/health', (req, res) => {
     roles: ['worker', 'insurer', 'admin'],
     timestamp: new Date().toISOString()
   });
+});
+
+// Catch-all route to serve the React app for any unmatched route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // ============================================================

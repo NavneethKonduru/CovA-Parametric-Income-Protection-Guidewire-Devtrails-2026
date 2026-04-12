@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_BASE, getWsUrl } from '../config';
 
 const ZONES = [
   { id: 'ZONE_A', name: 'Koramangala', risk: 'Medium', riskFactor: 1.0, color: '#F59E0B' },
@@ -51,7 +52,7 @@ export default function Onboarding({ token, onWorkerCreated }) {
       if (!form.zone || !form.archetype) return;
 
       try {
-        const res = await fetch(`/api/workers/premium-preview?zone=${form.zone}&archetype=${form.archetype}&peakHours=${form.peakHoursPerWeek}`);
+        const res = await fetch(`${API_BASE}/api/workers/premium-preview?zone=${form.zone}&archetype=${form.archetype}&peakHours=${form.peakHoursPerWeek}`);
         if (res.ok) {
           const data = await res.json();
           if (active) setPreview(data.premium);
@@ -162,7 +163,7 @@ export default function Onboarding({ token, onWorkerCreated }) {
     };
 
     try {
-      const res = await fetch('/api/workers/register', {
+      const res = await fetch(`${API_BASE}/api/workers/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

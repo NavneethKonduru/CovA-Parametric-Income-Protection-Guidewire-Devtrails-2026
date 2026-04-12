@@ -2,7 +2,7 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-const dbPath = path.join(__dirname, 'cova.db');
+const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'cova.db');
 const db = new Database(dbPath);
 
 // Enable WAL mode for better concurrent access

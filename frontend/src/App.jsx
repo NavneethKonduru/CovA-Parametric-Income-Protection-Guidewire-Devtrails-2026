@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE, getWsUrl } from './config';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
@@ -23,7 +24,7 @@ function App() {
 
   const handleLogout = () => {
     if (auth?.token) {
-      fetch('/api/auth/logout', {
+      fetch(`${API_BASE}/api/auth/logout', {
         method: 'POST',
         headers: { Authorization: `Bearer ${auth.token}` },
       }).catch(() => {});

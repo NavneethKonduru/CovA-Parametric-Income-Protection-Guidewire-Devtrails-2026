@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { API_BASE_URL, getWsUrl } from '../utils/api';
+import { API_BASE, getWsUrl } from '../config';
 import CDIGauge from '../components/CDIGauge';
 import ClaimTimeline from '../components/ClaimTimeline';
 
@@ -20,7 +20,7 @@ export default function WorkerDashboard({ token, workerId, onLogout }) {
       const id = workerId || 'W001';
       
       // Fetch worker data
-      const wRes = await fetch(`${API_BASE_URL}/api/workers/${id}`, { headers });
+      const wRes = await fetch(`${API_BASE}/api/workers/${id}`, { headers });
       if (wRes.ok) {
         const wData = await wRes.json();
         setWorker(wData.worker);
@@ -28,13 +28,13 @@ export default function WorkerDashboard({ token, workerId, onLogout }) {
       }
 
       // Fetch claims
-      const cRes = await fetch(`${API_BASE_URL}/api/claims?workerId=${id}`, { headers });
+      const cRes = await fetch(`${API_BASE}/api/claims?workerId=${id}`, { headers });
       if (cRes.ok) {
         const cData = await cRes.json();
         setClaims(cData.claims || cData || []);
       } else {
         // Fallback backward compatibility
-        const cResFallback = await fetch(`${API_BASE_URL}/api/claims/worker/${id}`, { headers });
+        const cResFallback = await fetch(`${API_BASE}/api/claims/worker/${id}`, { headers });
         if (cResFallback.ok) {
           const cDataFallback = await cResFallback.json();
           setClaims(cDataFallback.claims || []);
@@ -42,7 +42,7 @@ export default function WorkerDashboard({ token, workerId, onLogout }) {
       }
 
       // Fetch current signal state
-      const sRes = await fetch(`${API_BASE_URL}/api/workers/${id}/signal`, { headers });
+      const sRes = await fetch(`${API_BASE}/api/workers/${id}/signal`, { headers });
       if (sRes.ok) {
         const sData = await sRes.json();
         setSignalState(sData.signalState);
@@ -60,10 +60,11 @@ export default function WorkerDashboard({ token, workerId, onLogout }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workerId]);
 
-    // WebSocket for live updates
-    useEffect(() => {
-      const wsUrl = getWsUrl();
-      const ws = new WebSocket(wsUrl);
+  // WebSocket for live updates
+  useEffect(() => {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    
+    const ws = new WebSocket(getWsUrl());
     wsRef.current = ws;
 
     const id = workerId || 'W001';
@@ -81,10 +82,10 @@ export default function WorkerDashboard({ token, workerId, onLogout }) {
       }
       if (msg.type === 'CLAIM_CREATED' || msg.type === 'PAYOUT_SENT') {
         // Just refresh claims
-        fetch(`/api/claims?workerId=${id}`, { headers })
+        fetch(`${API_BASE}/api/claims?workerId=${id}`, { headers })
           .then(async r => {
             if (r.ok) { const d = await r.json(); return d.claims || d; }
-            const fb = await fetch(`/api/claims/worker/${id}`, { headers });
+            const fb = await fetch(`${API_BASE}/api/claims/worker/${id}`, { headers });
             const d = await fb.json();
             return d.claims || [];
           })

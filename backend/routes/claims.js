@@ -179,7 +179,7 @@ router.get('/master-payload', (req, res) => {
         payoutAmount: c.payoutAmount
       },
       telemetry: { weatherSource: "OpenWeatherMap", cdiScore: c.cdi },
-      financials: { razorpayTxnId: `txn_mock_${c.id}` }
+      financials: { razorpayTxnId: c.payoutTxnId || 'pending' }
     }))
   });
 });

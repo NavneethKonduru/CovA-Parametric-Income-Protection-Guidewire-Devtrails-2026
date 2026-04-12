@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE, getWsUrl } from '../config';
 
 export default function ClaimTimeline({ claimId, claim }) {
   const [timeline, setTimeline] = useState(null);
@@ -15,7 +16,7 @@ export default function ClaimTimeline({ claimId, claim }) {
     }
     
     try {
-      const res = await fetch(`/api/claims/${effectiveClaimId}/timeline`);
+      const res = await fetch(`${API_BASE}/api/claims/${effectiveClaimId}/timeline`);
       if (!res.ok) throw new Error('Failed to fetch timeline');
       const data = await res.json();
       setTimeline(data);
@@ -41,7 +42,7 @@ export default function ClaimTimeline({ claimId, claim }) {
 
   const handleDispute = async () => {
     try {
-      const res = await fetch(`/api/claims/${effectiveClaimId}/dispute`, {
+      const res = await fetch(`${API_BASE}/api/claims/${effectiveClaimId}/dispute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: "Disputed from UI", description: "Worker initiated dispute" })

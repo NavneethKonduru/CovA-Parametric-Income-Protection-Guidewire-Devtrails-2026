@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { API_BASE_URL } from '../utils/api';
+import { API_BASE, getWsUrl } from '../config';
 
 export default function Login({ onLogin }) {
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ export default function Login({ onLogin }) {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(API_BASE_URL + '/api/auth/login', {
+      const res = await fetch(`${API_BASE}/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password: 'cova2026' }),
