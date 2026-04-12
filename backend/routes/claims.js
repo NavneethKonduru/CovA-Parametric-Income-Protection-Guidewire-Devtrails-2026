@@ -122,6 +122,7 @@ router.post('/trigger', async (req, res) => {
       console.warn('[CLAIMS] Razorpay unavailable \u2014 using demo TXN:', paymentError.message);
       claimRecord.status = 'paid';
       claimRecord.payoutTxnId = `txn_demo_${claimRecord.id}_${Date.now()}`;
+      claimRecord.paymentFallback = true;
     }
   }
 
@@ -189,7 +190,13 @@ router.get('/master-payload', (req, res) => {
  * List all claims (Insurer view)
  */
 router.get('/', (req, res) => {
-  const claims = db.prepare('SELECT * FROM claims').all();
+  const { workerId } = req.query;
+  let claims;
+  if (workerId) {
+    claims = db.prepare('SELECT * FROM claims WHERE workerId = ?').all(workerId);
+  } else {
+    claims = db.prepare('SELECT * FROM claims').all();
+  }
   res.json({ count: claims.length, claims });
 });
 

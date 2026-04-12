@@ -72,9 +72,7 @@ router.get('/:zone', async (req, res) => {
         timestamp: new Date().toISOString()
       });
     } catch (err) {
-      if (process.env.DEBUG) {
-        console.error(`[WEATHER] OWM API error for ${zone}:`, err.message);
-      }
+      console.warn(`[WEATHER] OWM API failed for ${zone}, using mock fallback:`, err.message);
       // Fallback to mock data
     }
   }

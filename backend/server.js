@@ -250,7 +250,14 @@ app.get('/api/health', (req, res) => {
 
 // Catch-all route to serve the React app for any unmatched route
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  const indexPath = path.join(__dirname, '../frontend/dist/index.html');
+  const fs = require('fs');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    // If frontend dist is not available (API-only deployment), redirect to API info
+    res.redirect('/api-info');
+  }
 });
 
 // ============================================================
