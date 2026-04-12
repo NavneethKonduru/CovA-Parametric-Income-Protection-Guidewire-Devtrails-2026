@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE, getWsUrl } from '../config';
 
 export default function InsurerDashboard({ token, onLogout }) {
   const [config, setConfig] = useState(null);

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_BASE, getWsUrl } from '../config';
 
 const WEATHER_PRESETS = [
   { key: 'clear', label: 'Clear', severity: 0.05 },
