@@ -1,0 +1,12 @@
+[
+  { "id": "W001", "name": "Raju Kumar", "phone": "9876543210", "zone": "ZONE_A", "platform": "zomato", "archetype": "heavy_peak", "hourlyRate": 150, "status": "active", "enrolledDate": "2026-03-10" },
+  { "id": "W002", "name": "Priya Sharma", "phone": "9876543211", "zone": "ZONE_B", "platform": "swiggy", "archetype": "balanced", "hourlyRate": 120, "status": "active", "enrolledDate": "2026-03-10" },
+  { "id": "W003", "name": "Amit Patel", "phone": "9876543212", "zone": "ZONE_C", "platform": "zomato", "archetype": "casual", "hourlyRate": 80, "status": "active", "enrolledDate": "2026-03-11" },
+  { "id": "W004", "name": "Meera Reddy", "phone": "9876543213", "zone": "ZONE_A", "platform": "swiggy", "archetype": "heavy_peak", "hourlyRate": 150, "status": "active", "enrolledDate": "2026-03-11" },
+  { "id": "W005", "name": "Suresh Yadav", "phone": "9876543214", "zone": "ZONE_B", "platform": "zomato", "archetype": "balanced", "hourlyRate": 120, "status": "active", "enrolledDate": "2026-03-12" },
+  { "id": "W006", "name": "Lakshmi Devi", "phone": "9876543215", "zone": "ZONE_A", "platform": "swiggy", "archetype": "casual", "hourlyRate": 80, "status": "active", "enrolledDate": "2026-03-12" },
+  { "id": "W007", "name": "Rahul Singh", "phone": "9876543216", "zone": "ZONE_B", "platform": "zomato", "archetype": "heavy_peak", "hourlyRate": 150, "status": "active", "enrolledDate": "2026-03-13" },
+  { "id": "W008", "name": "Anita Kumari", "phone": "9876543217", "zone": "ZONE_C", "platform": "swiggy", "archetype": "balanced", "hourlyRate": 120, "status": "active", "enrolledDate": "2026-03-13" },
+  { "id": "W009", "name": "Vijay Nair", "phone": "9876543218", "zone": "ZONE_A", "platform": "zomato", "archetype": "balanced", "hourlyRate": 120, "status": "active", "enrolledDate": "2026-03-14" },
+  { "id": "W010", "name": "Deepa Rao", "phone": "9876543219", "zone": "ZONE_C", "platform": "swiggy", "archetype": "heavy_peak", "hourlyRate": 150, "status": "active", "enrolledDate": "2026-03-14" }
+]

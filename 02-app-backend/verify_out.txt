@@ -1,0 +1,68 @@
+[PG] No DATABASE_URL_READ set. Replica pool uses primary.
+[dotenv@17.3.1] injecting env (12) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+--- Starting E2E Verification ---
+
+[1] Testing Genuine Claim Trigger...
+  -> Claim Status: {
+  "isFraudulent": false,
+  "flags": [],
+  "riskLevel": "low",
+  "action": "pass",
+  "fraudScore": 0,
+  "totalFlags": 0,
+  "tchcLayer": {
+    "hardware": true,
+    "temporal": false,
+    "spatial": false
+  }
+}
+
+[2] Testing Spoofed Telemetry Trigger...
+  -> Claim Status: {
+  "isFraudulent": true,
+  "flags": [
+    {
+      "rule": "TELEPORTATION_SPEED",
+      "severity": "critical",
+      "description": "Worker velocity 447 km/h between pings exceeds physical limit (100 km/h). Likely GPS spoofing.",
+      "auto_reject": true
+    }
+  ],
+  "riskLevel": "high",
+  "action": "auto_reject",
+  "fraudScore": 0.95,
+  "totalFlags": 1,
+  "tchcLayer": {
+    "hardware": true,
+    "temporal": true,
+    "spatial": false
+  }
+}
+
+[3] Testing Replay Trace Trigger...
+  -> Claim Status: {
+  "isFraudulent": true,
+  "flags": [
+    {
+      "rule": "TELEPORTATION_SPEED",
+      "severity": "critical",
+      "description": "Worker velocity 112 km/h between pings exceeds physical limit (100 km/h). Likely GPS spoofing.",
+      "auto_reject": false
+    }
+  ],
+  "riskLevel": "high",
+  "action": "auto_reject",
+  "fraudScore": 0.95,
+  "totalFlags": 1,
+  "tchcLayer": {
+    "hardware": true,
+    "temporal": true,
+    "spatial": false
+  }
+}
+
+[4] Testing Webhook Idempotency...
+  -> First Hook Response: 404 { error: 'Transaction not found yet', reason: 'txn_not_found_yet' }
+  -> Second Hook Response (Duplicate): 404 { error: 'Transaction not found yet', reason: 'txn_not_found_yet' }
+
+--- All E2E Tests Completed ---

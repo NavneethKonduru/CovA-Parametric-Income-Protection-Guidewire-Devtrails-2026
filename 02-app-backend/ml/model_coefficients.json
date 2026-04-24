@@ -1,0 +1,27 @@
+{
+  "intercept": -88.125902,
+  "coefficients": {
+    "zone_risk": 30.034362,
+    "archetype_factor": 56.230394,
+    "hourly_rate": -0.214788,
+    "seasonal_factor": 33.218543,
+    "claim_history_factor": 30.164228
+  },
+  "feature_names": [
+    "zone_risk",
+    "archetype_factor",
+    "hourly_rate",
+    "seasonal_factor",
+    "claim_history_factor"
+  ],
+  "r2_score": 0.8792,
+  "training_samples": 500,
+  "premium_range": {
+    "min": 29,
+    "max": 89
+  },
+  "base_rate": 35,
+  "generated_at": "2026-03-31T14:30:00+05:30",
+  "model_type": "LinearRegression",
+  "note": "Premium = intercept + \u03a3(coefficient_i \u00d7 feature_i). Clamp to [29, 89]."
+}

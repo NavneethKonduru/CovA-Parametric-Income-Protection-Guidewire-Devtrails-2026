@@ -1,0 +1,10 @@
+node_modules/
+*.zip
+*.icloud
+*.pdf
+.DS_Store
+*.log
+.env
+dist/
+do_push.sh
+do_push2.sh

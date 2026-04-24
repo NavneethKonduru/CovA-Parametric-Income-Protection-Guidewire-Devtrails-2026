@@ -1,0 +1,162 @@
+[
+  {
+    "zone_risk": 0.7557,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 0.9063,
+    "claim_history_factor": 1.0188,
+    "premium": 36.19
+  },
+  {
+    "zone_risk": 0.7339,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.0692,
+    "claim_history_factor": 1.173,
+    "premium": 49.16
+  },
+  {
+    "zone_risk": 1.3014,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 0.9074,
+    "claim_history_factor": 1.0047,
+    "premium": 58.07
+  },
+  {
+    "zone_risk": 1.009,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 0.9497,
+    "claim_history_factor": 1.1125,
+    "premium": 29
+  },
+  {
+    "zone_risk": 0.9013,
+    "archetype_factor": 1.0,
+    "hourly_rate": 120,
+    "seasonal_factor": 1.0473,
+    "claim_history_factor": 1.1524,
+    "premium": 42.24
+  },
+  {
+    "zone_risk": 0.9431,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 1.0057,
+    "claim_history_factor": 1.0195,
+    "premium": 29
+  },
+  {
+    "zone_risk": 1.3903,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 0.9232,
+    "claim_history_factor": 0.9742,
+    "premium": 57.29
+  },
+  {
+    "zone_risk": 0.8058,
+    "archetype_factor": 1.0,
+    "hourly_rate": 120,
+    "seasonal_factor": 1.1018,
+    "claim_history_factor": 1.1324,
+    "premium": 34.94
+  },
+  {
+    "zone_risk": 1.3308,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.038,
+    "claim_history_factor": 1.1574,
+    "premium": 76.53
+  },
+  {
+    "zone_risk": 1.3419,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 0.9481,
+    "claim_history_factor": 0.9674,
+    "premium": 29.21
+  },
+  {
+    "zone_risk": 1.2688,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.1138,
+    "claim_history_factor": 1.1666,
+    "premium": 82.77
+  },
+  {
+    "zone_risk": 1.2624,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 1.1085,
+    "claim_history_factor": 0.9907,
+    "premium": 34.98
+  },
+  {
+    "zone_risk": 0.7314,
+    "archetype_factor": 1.0,
+    "hourly_rate": 120,
+    "seasonal_factor": 1.0755,
+    "claim_history_factor": 1.1209,
+    "premium": 33.75
+  },
+  {
+    "zone_risk": 0.794,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.0335,
+    "claim_history_factor": 1.0112,
+    "premium": 40.97
+  },
+  {
+    "zone_risk": 1.2543,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 1.072,
+    "claim_history_factor": 1.0049,
+    "premium": 34.31
+  },
+  {
+    "zone_risk": 0.9802,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.1055,
+    "claim_history_factor": 1.1513,
+    "premium": 62.36
+  },
+  {
+    "zone_risk": 1.0436,
+    "archetype_factor": 1.4,
+    "hourly_rate": 150,
+    "seasonal_factor": 1.1283,
+    "claim_history_factor": 1.0918,
+    "premium": 60.36
+  },
+  {
+    "zone_risk": 1.0286,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 1.0248,
+    "claim_history_factor": 1.1712,
+    "premium": 29.41
+  },
+  {
+    "zone_risk": 1.0078,
+    "archetype_factor": 1.0,
+    "hourly_rate": 120,
+    "seasonal_factor": 0.9349,
+    "claim_history_factor": 1.1362,
+    "premium": 37.18
+  },
+  {
+    "zone_risk": 0.7779,
+    "archetype_factor": 0.7,
+    "hourly_rate": 80,
+    "seasonal_factor": 1.0071,
+    "claim_history_factor": 1.0959,
+    "premium": 29
+  }
+]

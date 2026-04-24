@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://cova-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/mock/:path*",
+      "destination": "https://cova-backend.onrender.com/mock/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
