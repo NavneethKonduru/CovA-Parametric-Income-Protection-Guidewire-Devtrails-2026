@@ -39,10 +39,10 @@ router.get('/insurer', requireRole('insurer', 'admin'), async (req, res) => {
   const claimStats = await pg.query(`
     SELECT 
       COUNT(*) as c,
-      COUNT(*) FILTER (WHERE status = 'paid') as approved,
-      COUNT(*) FILTER (WHERE status = 'flagged') as flagged,
-      COUNT(*) FILTER (WHERE status = 'rejected') as rejected,
-      COALESCE(SUM(payout_amount) FILTER (WHERE status = 'paid'), 0) as total_payout
+      COUNT(*) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')) as approved,
+      COUNT(*) FILTER (WHERE status IN ('held_fraud_review','pending_telemetry')) as flagged,
+      COUNT(*) FILTER (WHERE status IN ('rejected_fraud','rejected_cap_reached','expired_no_evidence')) as rejected,
+      COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')), 0) as total_payout
     FROM claims WHERE data_mode = $1`, [pg.getDataMode()]);
     
   const totalClaims = parseInt(claimStats.rows[0]?.c || 0);
@@ -58,13 +58,13 @@ router.get('/insurer', requireRole('insurer', 'admin'), async (req, res) => {
   // Fraud savings calculation
   const fraudSavingsRes = await pg.query(`
     SELECT COALESCE(SUM(payout_amount), 0) as savings 
-    FROM claims WHERE status = 'rejected_fraud' AND data_mode = $1`, [pg.getDataMode()]);
+    FROM claims WHERE status IN ('rejected_fraud','rejected_cap_reached') AND data_mode = $1`, [pg.getDataMode()]);
   const fraudSavings = parseFloat(fraudSavingsRes.rows[0]?.savings || 0);
 
   // Historical trends (Last 30 days)
   const trendsRes = await pg.query(`
     SELECT date, 
-            COUNT(*) FILTER (WHERE status = 'paid') as paid_count,
+            COUNT(*) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')) as paid_count,
            SUM(payout_amount) as payout
     FROM claims 
     WHERE date >= CURRENT_DATE - INTERVAL '30 days' AND data_mode = $1
@@ -156,7 +156,7 @@ router.get('/worker/:id', requireRole('worker', 'admin', 'insurer'), async (req,
   // Real claims from DB
   const claims = await claimsRepo.findByWorker(req.params.id);
   const totalEarnings = claims
-    .filter(c => c.status === 'paid')
+    .filter(c => ['paid','approved_auto','processing_payout','manual_approved'].includes(c.status))
     .reduce((sum, c) => sum + (parseFloat(c.payout_amount) || 0), 0);
 
   const riskMessages = {
@@ -309,9 +309,9 @@ router.get('/insurer/analytics', requireRole('insurer', 'admin'), async (req, re
   const dailyClaimsRes = await pg.query(`
     SELECT date,
            COUNT(*) as total,
-           COUNT(*) FILTER (WHERE status = 'paid') as paid,
-           COUNT(*) FILTER (WHERE status IN ('rejected','rejected_fraud')) as rejected,
-           COALESCE(SUM(payout_amount) FILTER (WHERE status = 'paid'), 0) as payout
+           COUNT(*) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')) as paid,
+           COUNT(*) FILTER (WHERE status IN ('rejected_fraud','rejected_cap_reached','expired_no_evidence')) as rejected,
+           COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')), 0) as payout
     FROM claims WHERE data_mode = $1
     GROUP BY date ORDER BY date DESC LIMIT 30
   `, [dataMode]);
@@ -339,9 +339,9 @@ router.get('/insurer/analytics', requireRole('insurer', 'admin'), async (req, re
   // 4. Fraud detection summary
   const fraudStats = await pg.query(`
     SELECT 
-      COUNT(*) FILTER (WHERE status IN ('rejected','rejected_fraud')) as blocked,
-      COUNT(*) FILTER (WHERE status = 'flagged') as flagged,
-      COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('rejected','rejected_fraud')), 0) as saved
+      COUNT(*) FILTER (WHERE status IN ('rejected_fraud','rejected_cap_reached','expired_no_evidence')) as blocked,
+      COUNT(*) FILTER (WHERE status IN ('held_fraud_review','pending_telemetry')) as flagged,
+      COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('rejected_fraud','rejected_cap_reached')), 0) as saved
     FROM claims WHERE data_mode = $1
   `, [dataMode]);
 
@@ -349,7 +349,7 @@ router.get('/insurer/analytics', requireRole('insurer', 'admin'), async (req, re
   const monthlyFinancials = await pg.query(`
     SELECT DATE_TRUNC('month', created_at) as month,
            COUNT(DISTINCT worker_id) * 35 as premium_est,
-           COALESCE(SUM(payout_amount) FILTER (WHERE status = 'paid'), 0) as payouts
+           COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('paid','approved_auto','processing_payout','manual_approved')), 0) as payouts
     FROM claims WHERE data_mode = $1
     GROUP BY DATE_TRUNC('month', created_at)
     ORDER BY month DESC LIMIT 6

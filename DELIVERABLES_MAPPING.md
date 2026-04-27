@@ -8,7 +8,7 @@
 
 ## 📋 Navigation
 
-[📖 README_FINAL.md](./README_FINAL.md) · [💼 BUSINESS_PLAN.md](./BUSINESS_PLAN.md) · [💰 FINANCIAL_PROJECTIONS.md](./FINANCIAL_PROJECTIONS.md)
+[📖 README.md](./README.md) · [💼 BUSINESS_PLAN.md](./BUSINESS_PLAN.md) · [💰 FINANCIAL_PROJECTIONS.md](./FINANCIAL_PROJECTIONS.md)
 
 ---
 
@@ -201,7 +201,7 @@ Full CRUD policy lifecycle:
 
 **What CovA 126 built:**
 
-**The 7-factor AI premium engine** — see [README_FINAL.md Section 4](./README_FINAL.md) for full factor breakdown.
+**The 7-factor AI premium engine** — see [README.md Section 4](./README.md) for full factor breakdown.
 
 Specific implementations of the hints given:
 - ✅ **Zone safety discount:** Whitefield (Bengaluru) historically low-waterlogging → 0.72× zone multiplier → ~₹8/week cheaper than flood-prone zones
@@ -326,4 +326,4 @@ Single GitHub repository maintained continuously across all 3 phases with:
 
 > *Every deliverable above exists in the repository. Every metric above is derived from real data or clearly labelled simulation. Every claim above is verifiable in the 5-minute demo video. There are no gaps — because we planned for this audit from Week 1.*
 
-📖 [README_FINAL.md](./README_FINAL.md) · [💼 BUSINESS_PLAN.md](./BUSINESS_PLAN.md) · [💰 FINANCIAL_PROJECTIONS.md](./FINANCIAL_PROJECTIONS.md)
+📖 [README.md](./README.md) · [💼 BUSINESS_PLAN.md](./BUSINESS_PLAN.md) · [💰 FINANCIAL_PROJECTIONS.md](./FINANCIAL_PROJECTIONS.md)

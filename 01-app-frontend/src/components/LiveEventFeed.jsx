@@ -77,9 +77,10 @@ export default function LiveEventFeed({ wsUrl, token }) {
     let ws, reconnectTimeout;
 
     const connect = () => {
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const url = wsUrl || (typeof window !== 'undefined'
-        ? (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + window.location.hostname + ':5000/ws'
-        : 'ws://localhost:5000/ws');
+        ? `${wsProtocol}//${window.location.host}/ws`
+        : 'ws://localhost:3001/ws');
 
       ws = new WebSocket(url);
       wsRef.current = ws;

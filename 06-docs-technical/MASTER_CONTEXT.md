@@ -17,9 +17,9 @@ STACK: React/Vite/Tailwind (role-based routes), Node.js/Express,
        SQLite, OpenWeatherMap, Groq, Razorpay test, h3-js, ws
 ARCHITECTURE: Single deployment · 3 role contexts (Worker/Insurer/Admin) ·
               Role selector at login · Shared backend · Shared DB
-STATE: Backend engines built | Frontend = placeholder | Cron exists |
-       SQLite exists (needs insurer_config table) | Payout commented out |
-       No ML | WebSocket scaffolded
+STATE: Backend engines built | Frontend = ✅ COMPLETE | Cron exists |
+       SQLite/PostgreSQL schema ready | Payout active (Razorpay test) |
+       AI Risk Model active | WebSocket/SSE broadcast ready
 SPRINT: 6 days to April 2 internal deadline
 SUCCESS: Worker enrolls → insurer configures policy → monsoon simulates →
          auto-claim fires → fraud blocked → UPI paid → Guidewire submits →

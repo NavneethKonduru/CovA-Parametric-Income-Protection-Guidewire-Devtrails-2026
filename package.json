@@ -1,0 +1,22 @@
+{
+  "name": "cova-126",
+  "version": "1.0.0",
+  "description": "CovA 126 - Parametric Income Protection Platform for Q-Commerce Workers",
+  "scripts": {
+    "install:all": "npm install && cd 01-app-frontend && npm install && cd ../02-app-backend && npm install",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "dev:backend": "cd 02-app-backend && node server.js",
+    "dev:frontend": "cd 01-app-frontend && npm run dev"
+  },
+  "keywords": [
+    "parametric",
+    "insurance",
+    "guidewire"
+  ],
+  "author": "Navneeth Konduru",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
+  }
+}

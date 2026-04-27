@@ -301,6 +301,18 @@ async function boot() {
     // Init the demo sequencer
     const demoSequencer = require('./services/demo-sequencer');
     demoSequencer.initDemoSequencer(app.locals.broadcastEvent);
+
+    // Auto-start the simulation auto-pilot in demo mode
+    if (pg.getDataMode() === 'demo') {
+      setTimeout(async () => {
+        try {
+          console.log('[SERVER] Demo mode detected — launching auto-pilot simulation...');
+          await demoSequencer.startAutoPilot(pg);
+        } catch (e) {
+          console.error('[SERVER] Auto-pilot start failed:', e.message);
+        }
+      }, 12000); // Wait 12s for cron + DB to fully initialize
+    }
   });
 }
 

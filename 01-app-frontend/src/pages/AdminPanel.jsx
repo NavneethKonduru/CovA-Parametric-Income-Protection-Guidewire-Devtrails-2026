@@ -54,7 +54,8 @@ export default function AdminPanel({ token, onLogout, dataMode, onDataModeChange
     // WebSocket for log + status sync
     let ws, reconnectTimeout;
     const connectWs = () => {
-      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = import.meta.env.VITE_WS_URL || `${wsProtocol}//${window.location.host}/ws`;
       ws = new WebSocket(wsUrl);
       wsRef.current = ws;
       ws.onopen = () => { ws.send(JSON.stringify({ type: 'AUTH', payload: { token } })); };

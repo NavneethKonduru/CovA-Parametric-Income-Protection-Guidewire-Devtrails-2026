@@ -1,11 +1,15 @@
 /**
- * CovA Demo Sequencer — Randomized Edition
- * Each run picks a random zone, random severity, random worker subset.
- * The story arc is always the same (escalation → breach → claims → fraud → payouts)
- * but the specifics are never identical, making it feel real.
+ * CovA Demo Sequencer — Auto-Pilot Edition
+ * 
+ * TWO MODES:
+ *   1. Manual Demo: Single-shot demo triggered by admin button
+ *   2. Auto-Pilot:  Continuous simulation loop that runs on its own,
+ *                   cycling through zones with randomized scenarios every 45s
+ * 
+ * Auto-pilot starts automatically on server boot in demo mode.
  */
 
-const { activateScenario, executeCustomSimulation } = require('../simulation/scenario-engine');
+const { activateScenario } = require('../simulation/scenario-engine');
 
 let isRunning = false;
 let currentStep = 0;
@@ -14,6 +18,11 @@ let demoInterval = null;
 let broadcastFn = null;
 let activeZone = null;
 let demoTimeline = null;
+
+// Auto-pilot state
+let autoPilotRunning = false;
+let autoPilotTimer = null;
+let autoPilotCycleCount = 0;
 
 const ZONE_NAMES = {
   ZONE_A: 'Koramangala',
@@ -26,32 +35,248 @@ const WEATHER_OPTIONS = [
   { rainfall_mm: 61, condition: 'heavy_rain', severity: 0.88, temperature: 21 },
   { rainfall_mm: 74, condition: 'heavy_rain', severity: 0.91, temperature: 20 },
   { rainfall_mm: 58, condition: 'heavy_rain', severity: 0.85, temperature: 23 },
+  { rainfall_mm: 90, condition: 'heavy_rain', severity: 0.95, temperature: 19 },
 ];
 
 const DEMAND_OPTIONS = [
   { demand_score: 0.72, orders_per_hour: 11, platform_status: 'degraded' },
   { demand_score: 0.68, orders_per_hour: 9, platform_status: 'degraded' },
   { demand_score: 0.79, orders_per_hour: 8, platform_status: 'degraded' },
+  { demand_score: 0.85, orders_per_hour: 5, platform_status: 'degraded' },
 ];
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// ============================================================
+// AUTO-PILOT — Continuous Simulation Engine
+// ============================================================
+
+/**
+ * Runs a single auto-pilot cycle:
+ *  1. Pick random zone + weather
+ *  2. Set severe conditions
+ *  3. Set up fraud actors organically
+ *  4. Force 2 CDI cron cycles → auto-trigger claims
+ *  5. Wait for claims to process → payouts go through
+ *  6. Clear weather → next cycle
+ */
+async function runAutoPilotCycle(pgModule) {
+  const port = process.env.PORT || 3001;
+  const axios = require('axios');
+  const { runCron } = require('../cron/poller');
+
+  const zone = pick(['ZONE_A', 'ZONE_B', 'ZONE_C']);
+  const zoneName = ZONE_NAMES[zone];
+  const weather = pick(WEATHER_OPTIONS);
+  const demand = pick(DEMAND_OPTIONS);
+  const fraudCount = Math.floor(Math.random() * 4) + 2;
+  autoPilotCycleCount++;
+  const cycleId = `C${autoPilotCycleCount}`;
+
+  activeZone = zone;
+
+  console.log(`\n[AUTO-PILOT] ━━━ Cycle ${cycleId}: Storm → ${zoneName} (severity ${weather.severity}) ━━━`);
+
+  try {
+    // ── Phase 1: Set severe weather + demand drop ──
+    await axios.post(`http://localhost:${port}/mock/weather/set/${zone}`, weather).catch(() => {});
+    await axios.post(`http://localhost:${port}/mock/demand/set/${zone}`, demand).catch(() => {});
+
+    if (broadcastFn) {
+      broadcastFn('AUTO_PILOT_CYCLE', {
+        cycleId, phase: 'WEATHER_SET', zone, zoneName,
+        severity: weather.severity, rainfall: weather.rainfall_mm,
+        message: `🌧️ Storm hitting ${zoneName} — ${weather.rainfall_mm}mm rainfall`
+      });
+    }
+
+    // ── Phase 2: Set up fraud actors organically in the DB ──
+    const dataMode = pgModule.getDataMode();
+    try {
+      // Reset all workers to genuine first
+      await pgModule.query(
+        `UPDATE worker_signals SET signal_mode = 'auto_genuine' FROM workers w 
+         WHERE worker_signals.worker_id = w.id AND w.zone = $1 AND w.data_mode = $2`,
+        [zone, dataMode]
+      );
+
+      // Pick random workers as fraud actors
+      const workersRes = await pgModule.query(
+        'SELECT id FROM workers WHERE zone = $1 AND data_mode = $2', [zone, dataMode]
+      );
+      if (workersRes.rows.length > 0) {
+        const shuffled = workersRes.rows.sort(() => 0.5 - Math.random());
+        const fraudIds = shuffled.slice(0, Math.min(fraudCount, shuffled.length)).map(w => w.id);
+        if (fraudIds.length > 0) {
+          await pgModule.query(
+            "UPDATE worker_signals SET signal_mode = 'auto_fraud' WHERE worker_id = ANY($1)",
+            [fraudIds]
+          );
+          console.log(`[AUTO-PILOT] ${cycleId}: Set ${fraudIds.length} fraud actors in ${zone}`);
+        }
+      }
+    } catch (e) {
+      console.warn(`[AUTO-PILOT] Fraud setup warning:`, e.message);
+    }
+
+    // ── Phase 3: Force CDI breach — run cron twice for 2-cycle persistence ──
+    await sleep(3000);
+    console.log(`[AUTO-PILOT] ${cycleId}: Running CDI cron #1...`);
+    await runCron(broadcastFn).catch(e => console.warn('[AUTO-PILOT] Cron 1:', e.message));
+
+    if (broadcastFn) {
+      broadcastFn('AUTO_PILOT_CYCLE', {
+        cycleId, phase: 'CDI_BREACH_1', zone, zoneName,
+        message: `⚡ CDI rising in ${zoneName} — 1st threshold breach`
+      });
+    }
+
+    await sleep(4000);
+    console.log(`[AUTO-PILOT] ${cycleId}: Running CDI cron #2 → Claims will auto-trigger...`);
+    await runCron(broadcastFn).catch(e => console.warn('[AUTO-PILOT] Cron 2:', e.message));
+
+    if (broadcastFn) {
+      broadcastFn('AUTO_PILOT_CYCLE', {
+        cycleId, phase: 'CLAIMS_TRIGGERED', zone, zoneName,
+        message: `💰 Claims triggered for ${zoneName} workers — TCHC fraud engine active`
+      });
+    }
+
+    // ── Phase 4: Let claims finish processing ──
+    await sleep(5000);
+
+    // ── Phase 5: Read results and broadcast summary ──
+    try {
+      const statsRes = await pgModule.query(`
+        SELECT 
+          COUNT(*) as total,
+          COUNT(*) FILTER (WHERE status IN ('paid','approved_auto','processing_payout')) as paid,
+          COUNT(*) FILTER (WHERE status IN ('rejected_fraud','held_fraud_review')) as blocked,
+          COALESCE(SUM(payout_amount) FILTER (WHERE status IN ('paid','approved_auto','processing_payout')), 0) as total_payout
+        FROM claims 
+        WHERE zone = $1 AND data_mode = $2 
+          AND created_at >= NOW() - INTERVAL '2 minutes'
+      `, [zone, dataMode]);
+
+      const stats = statsRes.rows[0];
+      console.log(`[AUTO-PILOT] ${cycleId}: Results — ${stats.paid} paid, ${stats.blocked} blocked, ₹${parseFloat(stats.total_payout).toFixed(0)} disbursed`);
+
+      if (broadcastFn) {
+        broadcastFn('AUTO_PILOT_CYCLE', {
+          cycleId, phase: 'RESULTS', zone, zoneName,
+          paid: parseInt(stats.paid), blocked: parseInt(stats.blocked),
+          totalPayout: parseFloat(stats.total_payout),
+          message: `✅ Cycle ${cycleId} complete — ${stats.paid} genuine claims paid (₹${parseFloat(stats.total_payout).toFixed(0)}), ${stats.blocked} fraud blocked`
+        });
+      }
+    } catch (e) {
+      console.warn(`[AUTO-PILOT] Stats query warning:`, e.message);
+    }
+
+    // ── Phase 6: Clear severe weather ──
+    await axios.post(`http://localhost:${port}/mock/weather/set/${zone}`, {
+      rainfall_mm: 2, condition: 'clear', severity: 0.05, temperature: 32
+    }).catch(() => {});
+    await axios.post(`http://localhost:${port}/mock/demand/set/${zone}`, {
+      demand_score: 0.1, orders_per_hour: 45, platform_status: 'normal'
+    }).catch(() => {});
+
+    console.log(`[AUTO-PILOT] ${cycleId}: Weather cleared for ${zoneName}. Next cycle in ~30s.\n`);
+
+  } catch (err) {
+    console.error(`[AUTO-PILOT] Cycle ${cycleId} error:`, err.message);
+  }
+}
+
+/**
+ * Start the auto-pilot continuous simulation.
+ * Runs a new storm cycle every ~45 seconds, hitting different zones.
+ */
+async function startAutoPilot(pgModule) {
+  if (autoPilotRunning) return { status: 'already_running', cycleCount: autoPilotCycleCount };
+  if (!pgModule) pgModule = require('../data/pg');
+  if (pgModule.getDataMode() === 'real') {
+    throw new Error('Auto-pilot is strictly blocked in PRODUCTION mode.');
+  }
+
+  autoPilotRunning = true;
+  autoPilotCycleCount = 0;
+
+  console.log('\n╔═══════════════════════════════════════════════════╗');
+  console.log('║  🚀 AUTO-PILOT ENGAGED — Continuous Simulation   ║');
+  console.log('║  Storms will cycle across zones every ~45 seconds ║');
+  console.log('║  Claims, fraud detection, and payouts run live    ║');
+  console.log('╚═══════════════════════════════════════════════════╝\n');
+
+  if (broadcastFn) {
+    broadcastFn('AUTO_PILOT_STARTED', {
+      message: 'Continuous simulation engine engaged',
+      cycleInterval: '45s',
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // Run first cycle immediately
+  await runAutoPilotCycle(pgModule);
+
+  // Then loop every 45 seconds
+  autoPilotTimer = setInterval(async () => {
+    if (!autoPilotRunning) return;
+    try {
+      await runAutoPilotCycle(pgModule);
+    } catch (e) {
+      console.error('[AUTO-PILOT] Cycle failed:', e.message);
+    }
+  }, 45000);
+
+  return { status: 'started', message: 'Auto-pilot engaged — cycling every 45s' };
+}
+
+function stopAutoPilot() {
+  if (!autoPilotRunning) return { status: 'not_running' };
+  autoPilotRunning = false;
+  if (autoPilotTimer) {
+    clearInterval(autoPilotTimer);
+    autoPilotTimer = null;
+  }
+  if (broadcastFn) {
+    broadcastFn('AUTO_PILOT_STOPPED', {
+      message: 'Auto-pilot disengaged',
+      totalCycles: autoPilotCycleCount,
+      timestamp: new Date().toISOString()
+    });
+  }
+  console.log(`[AUTO-PILOT] Stopped after ${autoPilotCycleCount} cycles.`);
+  return { status: 'stopped', totalCycles: autoPilotCycleCount };
+}
+
+function getAutoPilotStatus() {
+  return {
+    isRunning: autoPilotRunning,
+    cycleCount: autoPilotCycleCount,
+    activeZone,
+  };
+}
+
+// ============================================================
+// MANUAL DEMO — Single-shot sequence (existing logic)
+// ============================================================
+
 function buildTimeline(pg, port) {
   const zone = pick(['ZONE_A', 'ZONE_B', 'ZONE_C']);
   const zoneName = ZONE_NAMES[zone];
   const weather = pick(WEATHER_OPTIONS);
   const demand = pick(DEMAND_OPTIONS);
-  const fraudCount = Math.floor(Math.random() * 5) + 3; // 3-7 fraud actors
+  const fraudCount = Math.floor(Math.random() * 5) + 3;
   const cdiPeak = (weather.severity * 0.6 + demand.demand_score * 0.4).toFixed(2);
 
   activeZone = zone;
 
   console.log(`[DEMO_SEQ] Story: Storm hits ${zoneName} — severity ${weather.severity} — ${fraudCount} fraud actors injected organically`);
 
-  // Vary timing slightly so it never feels like a script
-  const jitter = () => Math.floor(Math.random() * 4000) - 2000; // ±2s
+  const jitter = () => Math.floor(Math.random() * 4000) - 2000;
 
   return {
     zone,
@@ -74,14 +299,11 @@ function buildTimeline(pg, port) {
         name: `Heavy rain detected — ${zoneName}`,
         emoji: '🌧️',
         action: async () => {
-          // Prepare the fraud mix organically in the database
           const dataMode = pg.getDataMode();
           await pg.query(`UPDATE worker_signals SET signal_mode = 'auto_genuine' FROM workers w WHERE worker_signals.worker_id = w.id AND w.zone = $1 AND w.data_mode = $2`, [zone, dataMode]);
           
-          // Select a random subset to become fraud actors
           const workersRes = await pg.query(`SELECT id FROM workers WHERE zone = $1 AND data_mode = $2`, [zone, dataMode]);
           if (workersRes.rows.length > 0) {
-            // Shuffle and pick fraudCount workers
             const shuffled = workersRes.rows.sort(() => 0.5 - Math.random());
             const fraudIds = shuffled.slice(0, Math.min(fraudCount, shuffled.length)).map(w => w.id);
             if (fraudIds.length > 0) {
@@ -203,6 +425,7 @@ function getDemoStatus() {
     currentStep,
     totalSteps,
     activeZone,
+    autoPilot: getAutoPilotStatus(),
     timeline: demoTimeline
       ? demoTimeline.steps.map((s, i) => ({
           step: i,
@@ -216,4 +439,16 @@ function getDemoStatus() {
   };
 }
 
-module.exports = { initDemoSequencer, startDemo, stopDemo, getDemoStatus };
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+module.exports = { 
+  initDemoSequencer, 
+  startDemo, 
+  stopDemo, 
+  getDemoStatus, 
+  startAutoPilot, 
+  stopAutoPilot, 
+  getAutoPilotStatus 
+};

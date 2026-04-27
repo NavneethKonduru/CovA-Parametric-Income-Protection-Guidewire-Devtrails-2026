@@ -58,13 +58,13 @@ router.get('/health', requireRole('admin'), async (req, res) => {
     const [workerRes, claimRes, paidRes, eventRes, fraudRes] = await Promise.all([
       pg.query('SELECT COUNT(*) as c FROM workers WHERE data_mode = $1', [dataMode]),
       pg.query('SELECT COUNT(*) as c FROM claims WHERE data_mode = $1', [dataMode]),
-      pg.query("SELECT COUNT(*) as c FROM claims WHERE status IN ('paid','PAID') AND data_mode = $1", [dataMode]),
+      pg.query("SELECT COUNT(*) as c FROM claims WHERE status IN ('paid','approved_auto','processing_payout','manual_approved') AND data_mode = $1", [dataMode]),
       pg.query('SELECT COUNT(*) as c FROM disruption_events WHERE data_mode = $1', [dataMode]),
-      pg.query("SELECT COUNT(*) as c FROM claims WHERE status IN ('rejected','rejected_fraud') AND data_mode = $1", [dataMode]),
+      pg.query("SELECT COUNT(*) as c FROM claims WHERE status IN ('rejected_fraud','rejected_cap_reached','expired_no_evidence') AND data_mode = $1", [dataMode]),
     ]);
 
     const totalPayoutRes = await pg.query(
-      "SELECT COALESCE(SUM(payout_amount),0) as total FROM claims WHERE status IN ('paid','PAID') AND data_mode = $1",
+      "SELECT COALESCE(SUM(payout_amount),0) as total FROM claims WHERE status IN ('paid','approved_auto','processing_payout','manual_approved') AND data_mode = $1",
       [dataMode],
     );
 
@@ -107,6 +107,28 @@ router.post('/demo-seq/start', requireRole('admin'), (req, res) => {
 router.post('/demo-seq/stop', requireRole('admin'), (req, res) => {
   demoSequencer.stopDemo();
   res.json({ message: 'Demo sequence stopped', status: demoSequencer.getDemoStatus() });
+});
+
+// ============================================================
+// AUTO-PILOT — Continuous Simulation Engine
+// ============================================================
+
+router.get('/auto-pilot/status', requireRole('admin'), (req, res) => {
+  res.json(demoSequencer.getAutoPilotStatus());
+});
+
+router.post('/auto-pilot/start', requireRole('admin'), async (req, res) => {
+  try {
+    const result = await demoSequencer.startAutoPilot(pg);
+    res.json({ message: 'Auto-pilot engaged', ...result });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.post('/auto-pilot/stop', requireRole('admin'), (req, res) => {
+  const result = demoSequencer.stopAutoPilot();
+  res.json({ message: 'Auto-pilot disengaged', ...result });
 });
 
 // ============================================================

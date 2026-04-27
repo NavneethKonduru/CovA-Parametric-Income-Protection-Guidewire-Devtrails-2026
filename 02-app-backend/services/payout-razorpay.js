@@ -3,12 +3,12 @@ require('dotenv').config();
 
 // Create Razorpay instance using keys from .env
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder'
+  key_id: process.env.RAZORPAY_KEY_ID || 'RAZORPAY_KEY_ID_REQUIRED',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'RAZORPAY_SECRET_REQUIRED'
 });
 
 /**
- * Execute a test payout using Razorpay API
+ * Execute a payout using Razorpay API (or mock in demo mode)
  * @param {string} fundAccountId The Razorpay Fund Account ID for the worker
  * @param {number} amount Amount to pay (in INR)
  * @param {string} claimId The CovA claim reference ID for tracking
@@ -16,8 +16,19 @@ const razorpay = new Razorpay({
  * @returns {Promise<object>} { id: string, status: string }
  */
 async function executePayout(fundAccountId, amount, claimId, idempotencyKey) {
-  if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID === 'rzp_test_placeholder') {
-    console.warn('[RAZORPAY] Test keys are missing! Using mock payout ID.');
+  const pg = require('../data/pg');
+
+  // ── DEMO MODE: Always use instant mock payouts ──
+  // Never hit real Razorpay APIs during demos — instant confirmation
+  if (pg.getDataMode() === 'demo') {
+    const txnId = `txn_${claimId}_${Date.now().toString(36)}`;
+    console.log(`[RAZORPAY] Demo payout: ₹${amount} → ${txnId}`);
+    return { id: txnId, status: 'paid' };
+  }
+
+  // ── PRODUCTION MODE: Real Razorpay integration ──
+  if (!process.env.RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID === 'RAZORPAY_KEY_ID_REQUIRED') {
+    console.warn('[RAZORPAY] Production keys missing! Returning mock.');
     return { id: `txn_mock_${claimId}_dev`, status: 'paid' };
   }
 
@@ -30,11 +41,6 @@ async function executePayout(fundAccountId, amount, claimId, idempotencyKey) {
   }
 
   try {
-    // In a real Razorpay Payouts (RazorpayX) integration, we would create a fund account
-    // and issue a payout request. For standard Razorpay Test Mode without RazorpayX,
-    // we mock a successful response with a generated string, or invoke a basic Razorpay creation.
-    // The instructions say "calls Razorpay test API. Replace txn_mock_CLM_001 with real Razorpay test TXN IDs."
-
     console.log(`[RAZORPAY] Initiating payout for ₹${amount} to ${fundAccountId} (Claim: ${claimId})`);
 
     const payoutResponse = await razorpay.payouts.create({
@@ -57,10 +63,6 @@ async function executePayout(fundAccountId, amount, claimId, idempotencyKey) {
     return { id: payoutResponse.id, status: payoutResponse.status || 'processing' };
   } catch (error) {
     console.error(`[RAZORPAY] Payout failed for Claim ${claimId}:`, error.description || error.message);
-    
-    // Fallback: the user stated in the task that this is the "difference between mock and real test mode".
-    // If it fails (mostly because test keys lack RazorpayX permissions or are missing fund_account logic), 
-    // we throw to allow the backend to catch the payment failure.
     throw new Error(`Razorpay Execution Error: ${error.description || error.message}`);
   }
 }

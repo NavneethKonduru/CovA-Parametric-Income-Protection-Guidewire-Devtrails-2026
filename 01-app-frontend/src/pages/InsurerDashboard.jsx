@@ -99,7 +99,8 @@ export default function InsurerDashboard({ token, onLogout, dataMode }) {
 
     let ws, reconnectTimeout;
     const connectWs = () => {
-      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = import.meta.env.VITE_WS_URL || `${wsProtocol}//${window.location.host}/ws`;
       ws = new WebSocket(wsUrl);
       wsRef.current = ws;
       ws.onopen = () => { setWsStatus('connected'); };

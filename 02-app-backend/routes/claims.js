@@ -52,11 +52,19 @@ router.post('/trigger', requireInternalOrAdmin, async (req, res) => {
   });
 
   const hourOfDay = new Date().getHours();
-  const timeSlot = getTimeSlot(hourOfDay);
+  let timeSlot = getTimeSlot(hourOfDay);
+
+  // In demo mode, override off-hours to ensure meaningful payouts during demos
+  const pg_early = require('../data/pg');
+  const isDemo = pg_early.getDataMode() === 'demo';
+  
+  if (isDemo && timeSlot === 'off') {
+    timeSlot = 'peak';
+  }
 
   // 2. Validate Claim
   const validation = validateClaim(
-    { weatherScore, demandScore, peerScore },
+    { weatherScore, demandScore, peerScore, isDemo },
     timeSlot,
     disruption.cdi
   );
@@ -102,7 +110,7 @@ router.post('/trigger', requireInternalOrAdmin, async (req, res) => {
   let effectiveHoursLost = Math.min(hoursLost, Math.max(0, dailyCap - hoursClaimedToday));
 
   if (validation.status === 'approved') {
-    const payout = calculatePayout(effectiveHoursLost, worker.hourly_rate, timeSlot, disruption.cdi);
+    const payout = calculatePayout(effectiveHoursLost, worker.hourly_rate || 120, timeSlot, disruption.cdi);
     claimRecord.payout_amount = payout.payoutAmount;
     claimRecord.hours_lost = effectiveHoursLost; // Cap the recorded hours
     

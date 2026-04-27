@@ -38,7 +38,16 @@ function setDecorrelateSignals(bool) {
 //  CONSTANTS
 // ──────────────────────────────────────────────
 
-const WEIGHTS = {
+const IS_DEMO = process.env.COVA_MODE === 'demo';
+
+const WEIGHTS = IS_DEMO ? {
+  weather: 0.45,
+  demand: 0.35,
+  civic: 0.10,
+  telemetry_drop: 0.05,
+  historical: 0.02,
+  peer: 0.03
+} : {
   weather: 0.35,
   demand: 0.25,
   civic: 0.15,

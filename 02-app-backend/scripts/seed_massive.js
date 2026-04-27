@@ -29,12 +29,16 @@ async function generateMassiveData() {
   await pg.initialize();
   
   console.log('--- PURGING OLD MOCK DATA ---');
-  await pg.query('DELETE FROM public.worker_signals');
-  await pg.query('DELETE FROM public.payout_log');
-  await pg.query('DELETE FROM public.claims');
-  await pg.query('DELETE FROM public.policies');
-  await pg.query('DELETE FROM fraud.detection_log');
-  await pg.query('DELETE FROM public.workers');
+  try {
+    await pg.query('DELETE FROM fraud.detection_log');
+    await pg.query('DELETE FROM public.payout_log');
+    await pg.query('DELETE FROM public.claims');
+    await pg.query('DELETE FROM public.worker_signals');
+    await pg.query('DELETE FROM public.policies');
+    await pg.query('DELETE FROM public.workers');
+  } catch (e) {
+    console.warn('[SEED] Purge warning (non-critical if tables empty):', e.message);
+  }
 
   console.log('--- SEEDING REALISTIC WORKERS (Target: ~5000) ---');
   
@@ -89,15 +93,45 @@ async function generateMassiveData() {
 
   console.log('--- GENERATING HISTORICAL CLAIMS BASED ON WEATHER ---');
   
-  const extremeWeather = await pg.query(`
+  // Seed some recent weather observations first so the analysis has something to work with
+  const zones = ['ZONE_A', 'ZONE_B', 'ZONE_C'];
+  const now = new Date();
+  const weatherValues = [];
+  for (let i = 0; i < 30; i++) {
+    const ts = new Date(now.getTime() - i * 86400000).toISOString();
+    const zone = zones[i % 3];
+    const score = 0.4 + Math.random() * 0.5;
+    weatherValues.push(`('${ts}', '${zone}', 'synthetic_seed', ${score}, 22, 55, 12)`);
+  }
+  await pg.query(`
+    INSERT INTO weather.observations (timestamp, zone, source, weather_score, temperature_c, humidity_pct, wind_speed_kmh)
+    VALUES ${weatherValues.join(',')}
+    ON CONFLICT DO NOTHING
+  `);
+
+  let extremeWeather = await pg.query(`
     SELECT timestamp, zone, weather_score 
     FROM weather.observations 
-    WHERE weather_score > 0.6 AND timestamp >= '2023-01-01'
+    WHERE weather_score > 0.6 AND timestamp >= CURRENT_DATE - INTERVAL '90 days'
     ORDER BY timestamp ASC
     LIMIT 1000
   `);
   
-  console.log(`Found ${extremeWeather.rows.length} extreme weather events since 2023. Simulating massive claims...`);
+  if (extremeWeather.rows.length === 0) {
+    console.log("No recent extreme weather found in DB. Creating synthetic weather events for seeding...");
+    const syntheticEvents = [];
+    for (let i = 0; i < 10; i++) {
+      const date = new Date(Date.now() - (i * 24 * 3600000));
+      syntheticEvents.push({
+        timestamp: date.toISOString(),
+        zone: zones[i % 3],
+        weather_score: 0.85
+      });
+    }
+    extremeWeather = { rows: syntheticEvents };
+  }
+  
+  console.log(`Found ${extremeWeather.rows.length} extreme weather events. Simulating massive claims...`);
   
   let totalClaims = 0;
   const workersRes = await pg.query("SELECT id, name, zone, platform, hourly_rate FROM workers WHERE data_mode = 'demo'");
@@ -108,12 +142,12 @@ async function generateMassiveData() {
 
   for (const event of extremeWeather.rows) {
     const zoneWorkers = workersByZone[event.zone] || [];
-    const affectedCount = Math.floor(zoneWorkers.length * 0.02);
+    const affectedCount = Math.floor(zoneWorkers.length * 0.012); // ~1.2% per event -> ~12% total -> ~45% loss ratio
     const affected = zoneWorkers.sort(() => 0.5 - Math.random()).slice(0, affectedCount);
     
     for (const w of affected) {
-      const claimId = `CLM_${Date.now()}_${Math.floor(Math.random()*100000)}`;
-      const hoursLost = (Math.random() * 3 + 1);
+      const claimId = `CLM_${Date.now()}_${Math.floor(Math.random()*1000000)}`;
+      const hoursLost = (Math.random() * 3 + 2); // 2-5 hours
       const payout = w.hourly_rate * hoursLost;
       const dateStr = new Date(event.timestamp).toISOString().split('T')[0];
 

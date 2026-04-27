@@ -281,8 +281,8 @@ async function runCron(broadcastEvent) {
           `, [todayDate, zone, dataMode, timeSlot]);
 
           const workersInZone = workersRes.rows;
-          const BATCH_SIZE = 50;
-          const BATCH_DELAY_MS = 100;
+          const BATCH_SIZE = 10;
+          const BATCH_DELAY_MS = 500;
           
           console.log(`[CRON] Triggering ${workersInZone.length} fraud-aware claims for ${zone} in batches of ${BATCH_SIZE}`);
           for (let i = 0; i < workersInZone.length; i += BATCH_SIZE) {

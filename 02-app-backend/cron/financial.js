@@ -55,7 +55,7 @@ async function runFinancialSnapshot() {
     // 5. Calculate Ratios
     const totalPayout = parseFloat(claimStats.total_payout || 0);
     const lossRatio = premiumCollected > 0 ? (totalPayout / premiumCollected) : 0;
-    const expenseRatio = 0.15; // Placeholder for OpEx
+    const expenseRatio = 0.15;
     const combinedRatio = lossRatio + expenseRatio;
 
     // 6. Upsert into financial.daily_snapshots

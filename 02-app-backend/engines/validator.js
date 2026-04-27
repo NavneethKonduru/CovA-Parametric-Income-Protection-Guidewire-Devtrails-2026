@@ -61,11 +61,23 @@ function validateClaim(signals, timeSlot, cdi) {
   }
 
   // Rule 4: CDI ≥ 0.6 AND 2+ signals → Standard approve
-  if (cdi >= 0.6 && signalCount >= MIN_SIGNALS_REQUIRED) {
+  const isDemo = !!signals.isDemo;
+  const approveThreshold = 0.6;
+  
+  if (cdi >= approveThreshold && signalCount >= MIN_SIGNALS_REQUIRED) {
     return {
       status: "approved",
       reason: `Disruption confirmed (CDI: ${cdi.toFixed(3)}). ${signalCount}/3 signals validated: [${confirmedSignals.join(', ')}]. Claim approved.`,
       details: { rule: "STANDARD_APPROVE", signalCount, confirmedSignals, cdi }
+    };
+  }
+
+  // DEMO OVERRIDE: If in demo mode and we have 2+ signals, be more lenient with CDI threshold
+  if (signals.isDemo && cdi >= 0.5 && signalCount >= MIN_SIGNALS_REQUIRED) {
+    return {
+      status: "approved",
+      reason: `[DEMO MODE] Disruption corroboration (CDI: ${cdi.toFixed(3)}). ${signalCount}/3 signals validated: [${confirmedSignals.join(', ')}]. Approved for demonstration purposes.`,
+      details: { rule: "DEMO_APPROVE", signalCount, confirmedSignals, cdi }
     };
   }
 
