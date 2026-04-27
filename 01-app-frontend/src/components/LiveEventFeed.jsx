@@ -107,7 +107,9 @@ export default function LiveEventFeed({ wsUrl, token }) {
             important,
             ts: new Date().toLocaleTimeString('en-IN', { hour12: false }),
           }, ...prev].slice(0, 60));
-        } catch {}
+        } catch {
+          // Ignore invalid JSON messages
+        }
       };
 
       ws.onclose = () => { reconnectTimeout = setTimeout(connect, 5000); };
