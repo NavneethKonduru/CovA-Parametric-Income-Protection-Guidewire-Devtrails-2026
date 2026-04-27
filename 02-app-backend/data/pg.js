@@ -157,6 +157,7 @@ class CacheClient {
 // ============================================================================
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://cova:cova@localhost:5432/cova_db';
+console.log('[PG] Database URL detected:', process.env.DATABASE_URL ? 'YES' : 'NO (using fallback)');
 
 /**
  * Detect if we're connecting to Neon (cloud-hosted, requires SSL).
